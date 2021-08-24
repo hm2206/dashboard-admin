@@ -1,7 +1,10 @@
-import '../styles/scss/app.scss'
+import React from "react"
+import { wrapper } from "../redux/store"
+import '../assets/scss/style.scss'
+import '../assets/scss/app.scss'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
-}
+const MyApp = ({ Component, pageProps}) => (
+  <Component {...pageProps} />
+)
 
-export default MyApp
+export default wrapper.withRedux(MyApp);

@@ -1,318 +1,341 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import Link from 'next/link'
-import { useSelector } from 'react-redux'
-import { MENUITEMS } from './menu';
-import { ArrowRight, ArrowLeft, Grid } from 'react-feather';
-import { translate } from 'react-switch-lang';
+import React from 'react'
+import Image from 'next/image'
 
+const IndexSidebar = () => {
 
-const Sidebar = (props) => {
-  const [mainmenu, setMainMenu] = useState(MENUITEMS);
-  const [margin, setMargin] = useState(0);
-  const [width, setWidth] = useState(0);
-  const [sidebartoogle, setSidebartoogle] = useState(true)
-  const handleScroll = () => {
-    // if(window.scrollY > 400){
-    //     if(configDB.data.settings.sidebar.type.split(' ').pop() === 'material-type' || configDB.data.settings.sidebar.type.split(' ').pop() ==='advance-layout')
-    //       document.querySelector(".sidebar-main").className = "sidebar-main hovered"
-    // }else{
-    //   if(document.getElementById("sidebar-main"))
-    //   document.querySelector(".sidebar-main").className = "sidebar-main"
-    // }
-}
-  useEffect(() => {
-    document.querySelector(".left-arrow").classList.add("d-none")
-    window.addEventListener('resize', handleResize)
-    handleResize();
-    const currentUrl = window.location.pathname;
-    MENUITEMS.map(items => {
-      items.Items.filter((Items) => {
-        if (Items.path === currentUrl)
-          setNavActive(Items)
-        if (!Items.children) return false
-        Items.children.filter(subItems => {
-          if (subItems.path === currentUrl)
-            setNavActive(subItems)
-          if (!subItems.children) return false
-          subItems.children.filter(subSubItems => {
-            if (subSubItems.path === currentUrl) {
-              setNavActive(subSubItems)
-              return true
-            }
-            else {
-              return false
-            }
-          })
-          return subItems
-        })
-        return Items
-      })
-      return items
-    })
-    window.addEventListener('scroll',handleScroll)
-    handleScroll();   
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleResize)
-    }
-
-    // eslint-disable-next-line
-  }, []);
-
-  const handleResize = () => {
-    setWidth(window.innerWidth - 500);
-  }
-
-  const setNavActive = (item) => {
-    MENUITEMS.map(menuItems => {
-      menuItems.Items.filter(Items => {
-        if (Items !== item)
-        {
-          Items.active = false
-          document.querySelector(".bg-overlay1").classList.remove("active")
-          } 
-        if (Items.children && Items.children.includes(item))
-          {Items.active = true
-            document.querySelector(".sidebar-link").classList.add("active")
-          }
-        if (Items.children) {
-          Items.children.filter(submenuItems => {
-            if (submenuItems.children && submenuItems.children.includes(item)) {
-              Items.active = true
-              submenuItems.active = true
-              return true
-            }
-            else {
-              return false
-            }
-          })
-        }
-        return Items
-      })
-      return menuItems
-    })
-    item.active = !item.active
-    setMainMenu({ mainmenu: MENUITEMS })
-  }
-
-  const toggletNavActive = (item) => {
-    if(window.innerWidth <= 991){
-      document.querySelector(".page-header").className = "page-header close_icon";
-      document.querySelector(".sidebar-wrapper").className = "sidebar-wrapper close_icon "
-      document.querySelector(".mega-menu-container").classList.remove("d-block")
-      if(item.type === "sub"){
-        document.querySelector(".page-header").className = "page-header ";
-        document.querySelector(".sidebar-wrapper").className = "sidebar-wrapper "
-      }
-    }
-
-    if (!item.active) {
-      MENUITEMS.map(a => {
-        a.Items.filter((Items) => {
-          if (a.Items.includes(item))
-            Items.active = false
-          if (!Items.children) return false
-          Items.children.forEach(b => {
-            if (Items.children.includes(item)) {
-              b.active = false
-            }
-            if (!b.children) return false
-            b.children.forEach(c => {
-              if (b.children.includes(item)) {
-                c.active = false
-              }
-            })
-          })
-          return Items
-        });
-        return a
-      });
-    }
-    item.active = !item.active
-    setMainMenu({ mainmenu: MENUITEMS })
-  }
-
-  const scrollToRight = () => {
-    if (margin <= -2598 || margin <= -2034) {
-      if(width === 492){
-        setMargin(-3570)
-      }else{
-        setMargin(-3464)
-      }
-      document.querySelector(".right-arrow").classList.add("d-none")
-      document.querySelector(".left-arrow").classList.remove("d-none")
-    }else {
-      setMargin(margin => margin += (-width));
-      document.querySelector(".left-arrow").classList.remove("d-none")
-    }
-  }
-
-  const scrollToLeft = () => {
-    if (margin >= -width) {
-      setMargin(0)
-      document.querySelector(".left-arrow").classList.add("d-none")
-      document.querySelector(".right-arrow").classList.remove("d-none")
-    } else {
-      setMargin(margin => margin += width);
-      document.querySelector(".right-arrow").classList.remove("d-none")
-    }
-  }
-
-  const closeOverlay = () => {
-    document.querySelector(".bg-overlay1").classList.remove("active")
-    document.querySelector(".sidebar-link").classList.remove("active")
-  }
-
-  const activeClass = () => {
-    document.querySelector(".sidebar-link").classList.add("active")
-    document.querySelector(".bg-overlay1").classList.add("active")
-  }
-
-  const openCloseSidebar = (toggle) => {
-    if (toggle) {
-      setSidebartoogle(!toggle);
-      document.querySelector(".page-header").className = "page-header close_icon";
-      document.querySelector(".sidebar-wrapper").className = "sidebar-wrapper close_icon "
-    } else {
-      setSidebartoogle(!toggle);
-      document.querySelector(".page-header").className = "page-header";
-      document.querySelector(".sidebar-wrapper").className = "sidebar-wrapper "
-    }
-  };
-
-  const responsiveSidebar = () => {
-    document.querySelector(".page-header").className = "page-header close_icon";
-    document.querySelector(".sidebar-wrapper").className = "sidebar-wrapper close_icon"
-  }
-  
-  return (
-    <Fragment>
-      <div className={`bg-overlay1`} onClick={() => {closeOverlay()}} ></div>
-      <div className="sidebar-wrapper" id="sidebar-wrapper">
-        <div className="logo-wrapper">
-          {/* <Link> */}
-            {/* <img className="img-fluid for-light" src={require("../../assets/images/logo/logo.png")} alt="" />
-            <img className="img-fluid for-dark" src={require("../../assets/images/logo/logo_dark.png")} alt="" /> */}
-          {/* </Link> */}
-          <div className="back-btn" onClick={() => responsiveSidebar()}><i className="fa fa-angle-left"></i></div>
-          <div className="toggle-sidebar" onClick={() => openCloseSidebar(sidebartoogle)}><Grid className="status_toggle middle sidebar-toggle" /></div>
-        </div>
-        <div className="logo-icon-wrapper">
-          {/* <Link to={`${process.env.PUBLIC_URL}/dashboard/default/${layout}`}> */}
-            {/* <img className="img-fluid" src={require("../../assets/images/logo/logo-icon.png")} alt="" /> */}
-            imagen
-          {/* </Link> */}
-        </div>
-        <nav className="sidebar-main" id="sidebar-main">
-            <div className="left-arrow" onClick={scrollToLeft}><ArrowLeft /></div>
-            <div id="sidebar-menu">
-              <ul className="sidebar-links custom-scrollbar" >
-                <li className="back-btn">
-                  <div className="mobile-back text-right"><span>{"Back"}</span><i className="fa fa-angle-right pl-2" aria-hidden="true"></i></div>
-                </li>
-                {
-                  MENUITEMS.map((Item, i) =>
-                    <Fragment key={i}>
-                      <li className="sidebar-main-title">
-                        <div>
-                          <h6 className="lan-1">{props.t(Item.menutitle)}</h6>
-                          <p className="lan-2">{props.t(Item.menucontent)}</p>
+    return (
+        <div className="sidebar-wrapper">
+            <div>
+                <div className="logo-wrapper">
+                    <a href="index.html">
+                        <div style={{ 
+                                display: "inline-block",
+                                maxWidth: "100%", 
+                                overflow: "hidden", 
+                                position: "relative", 
+                                boxSizing: "border-box", 
+                                margin: "0px"
+                            }}
+                        >
+                            <div style={{ boxSizing: "border-box", display: "block", maxWidth: "100%" }}>
+                                <Image alt="" 
+                                    layout="fill"
+                                    src={require("../../assets/images/logo/logo_dark.png")}
+                                    style={{ 
+                                        maxWidth: "100%", 
+                                        display: "block", 
+                                        margin: "0px", 
+                                        border: "none", 
+                                        padding: "0px"
+                                    }}
+                                />
+                            </div>
+                            <Image  alt=""
+                                layout="fill"
+                                src={require("../../assets/images/logo/logo_dark.png")}
+                                decoding="async" 
+                                data-nimg="true" 
+                                className="img-fluid for-light" 
+                                style={{ 
+                                    position: "absolute", 
+                                    inset: "0px",
+                                    boxSizing: "border-box", 
+                                    padding: "0px", 
+                                    border: "none", 
+                                    margin: "auto",
+                                    display: "block",
+                                    width: "0px",
+                                    height: "0px", 
+                                    minWidth: "100%",
+                                    maxWidth: "100%", 
+                                    minHeight: "100%", 
+                                    maxHeight: "100%"
+                                }} 
+                            />
                         </div>
-                      </li>
-                      {Item.Items.map((menuItem, i) =>
-                        <li className="sidebar-list" key={i}>
-                          {(menuItem.type === 'sub') ?
-                            <a href="javascript" className={`sidebar-link sidebar-title ${menuItem.active ? activeClass() : ''}`} onClick={(event) => {event.preventDefault(); setNavActive(menuItem)}}>
-                              <menuItem.icon />
-                              <span>{props.t(menuItem.title)}</span>
-                              {menuItem.badge ? <label className={menuItem.badge}>{menuItem.badgetxt}</label> : ""}
-                              <div className="according-menu">
-                                {menuItem.active ?
-                                  <i className="fa fa-angle-down"></i>
-                                  : <i className="fa fa-angle-right"></i>
-                                }
-                              </div>
-                            </a>
-                            : ''}
-
-                          {(menuItem.type === 'link') ?
-                            // <Link 
-                            //   className={`sidebar-link sidebar-title link-nav  ${menuItem.active ? 'active' : ''}`} 
-                            //   onClick={() => toggletNavActive(menuItem)}
-                            // >
-                              <a href={"/testing"}>
-                                <menuItem.icon />
-                                <span>{props.t(menuItem.title)}</span>
-                                {menuItem.badge ? <label className={menuItem.badge}>{menuItem.badgetxt}</label> : ""}
-                              </a>
-                            // </Link>
-                            : ''}
-
-                          {menuItem.children ?
-
-                            <ul className="sidebar-submenu"
-                              style={menuItem.active ? sidebartoogle ? { opacity: 1, transition: 'opacity 500ms ease-in' } : { display: "block" } : { display: "none" }}>
-
-                              {menuItem.children.map((childrenItem, index) => {
-
-                                return (
-                                  <li key={index}>
-
-                                    {(childrenItem.type === 'sub') ?
-                                      <a href="javascript" className={`${childrenItem.active ? 'active' : ''}`} onClick={(event) =>{event.preventDefault(); toggletNavActive(childrenItem)}}>{props.t(childrenItem.title)}
-                                        <span className="sub-arrow">
-                                          <i className="fa fa-chevron-right"></i>
-                                        </span>
-                                        <div className="according-menu">
-                                          {childrenItem.active ?
-                                            <i className="fa fa-angle-down"></i>
-                                            : <i className="fa fa-angle-right"></i>
-                                          }
+                        <div style={{ 
+                                display: "inline-block", 
+                                maxWidth: "100%", 
+                                overflow: "hidden", 
+                                position: "relative", 
+                                boxSizing: "border-box", 
+                                margin: "0px"
+                            }}
+                        >
+                            <div style={{ 
+                                    boxSizing: "border-box",
+                                    display: "block",
+                                    maxWidth: "100%"
+                                }}
+                            >
+                                <Image alt=""
+                                    layout="fill"
+                                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTciIGhlaWdodD0iMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+" 
+                                    style={{ 
+                                        maxWidth: "100%", 
+                                        display: "block", 
+                                        margin: "0px", 
+                                        border: "none", 
+                                        padding: "0px"
+                                    }}
+                                />
+                            </div>
+                            <Image alt=""
+                                layout="fill"
+                                src="/_next/image?url=%2F_next%2Fstatic%2Fimage%2Fassets%2Fimages%2Flogo%2Flogo_dark.a025ecce56328f0818471b92b6bebcad.png&amp;w=256&amp;q=75" 
+                                decoding="async" 
+                                className="img-fluid for-dark" 
+                                style={{ 
+                                    position: "absolute", 
+                                    inset: "0px", 
+                                    boxSizing: "border-box", 
+                                    padding: "0px", 
+                                    border: "none", 
+                                    margin: "auto", 
+                                    display: "block", 
+                                    width: "0px", 
+                                    height: "0px", 
+                                    minWidth: "100%", 
+                                    maxWidth:" 100%", 
+                                    minHeight: "100%",
+                                    maxHeight: "100%"
+                                }} 
+                                srcset="/_next/image?url=%2F_next%2Fstatic%2Fimage%2Fassets%2Fimages%2Flogo%2Flogo_dark.a025ecce56328f0818471b92b6bebcad.png&amp;w=128&amp;q=75 1x, /_next/image?url=%2F_next%2Fstatic%2Fimage%2Fassets%2Fimages%2Flogo%2Flogo_dark.a025ecce56328f0818471b92b6bebcad.png&amp;w=256&amp;q=75 2x"
+                            />
+                        </div>
+                    </a>
+                    <div className="back-btn">
+                        <i className="fa fa-angle-left"></i>
+                    </div>
+                    <div className="toggle-sidebar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-grid status_toggle middle sidebar-toggle">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </div>
+                </div>
+                <div className="logo-icon-wrapper">
+                    <a href="index.html">
+                        <div style={{ 
+                                display: "inline-block", 
+                                maxWidth: "100%", 
+                                overflow: "hidden", 
+                                position: "relative", 
+                                boxSizing: "border-box", 
+                                margin: "0px"
+                            }}
+                        >
+                            <div style={{ 
+                                    boxSizing: "border-box", 
+                                    display: "block", 
+                                    maxWidth: "100%"
+                                }}
+                            >
+                                <Image alt=""
+                                    layout="fill"
+                                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIi8+" 
+                                    style={{ 
+                                        maxWidth: "100%", 
+                                        display: "block", 
+                                        margin: "0px", 
+                                        border: "none", 
+                                        padding: "0px"
+                                    }}
+                                />
+                            </div>
+                            <noscript></noscript>
+                            <Image alt=""
+                                layout="fill"
+                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" 
+                                decoding="async" 
+                                className="img-fluid" 
+                                style={{ 
+                                    position: "absolute", 
+                                    inset: "0px", 
+                                    boxSizing: "border-box", 
+                                    padding: "0px", 
+                                    border: "none", 
+                                    margin: "auto", 
+                                    display: "block",
+                                    width: "0px", 
+                                    height: "0px", 
+                                    minWidth: "100%", 
+                                    maxWidth: "100%", 
+                                    minHeight: "100%",
+                                    maxHeight: "100%"
+                                }}
+                            />
+                        </div>
+                    </a>
+                </div>
+                <nav className="sidebar-main">
+                    <div className="left-arrow disabled" id="left-arrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-arrow-left">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </div>
+                    <div id="sidebar-menu">
+                        <ul className="sidebar-links" id="simple-bar" data-simplebar="init" style={{ display: "block" }}>
+                            <div className="simplebar-wrapper" style={{ margin: "0px" }}>
+                                <div className="simplebar-height-auto-observer-wrapper">
+                                    <div className="simplebar-height-auto-observer"></div>
+                                </div>
+                                <div className="simplebar-mask">
+                                    <div className="simplebar-offset" style={{ right: "0px", bottom: "0px" }}>
+                                        <div className="simplebar-content-wrapper" style={{ height: "100%", overflow: "hidden" }}>
+                                            <div className="simplebar-content" style={{ padding: "0px" }}>
+                                                <li className="back-btn">
+                                                    <div className="mobile-back text-end">
+                                                        <span>Back</span>
+                                                        <i className="fa fa-angle-right ps-2" aria-hidden="true"></i>
+                                                    </div>
+                                                </li>
+                                                <li className="sidebar-list">
+                                                    <a className="sidebar-link sidebar-title" href="../theme/index.html">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-home">
+                                                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                                        </svg>
+                                                        <span>Dashboard s</span>
+                                                        <div className="according-menu">
+                                                            <i className="fa fa-angle-right"></i>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li className="sidebar-list">
+                                                    <a className="sidebar-link sidebar-title active" href="#">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-anchor">
+                                                            <circle cx="12" cy="5" r="3"></circle>
+                                                            <line x1="12" y1="22" x2="12" y2="8"></line>
+                                                            <path d="M5 12H2a10 10 0 0 0 20 0h-3"></path>
+                                                        </svg>
+                                                        <span>Starter kit</span>
+                                                        <div className="according-menu">
+                                                            <i className="fa fa-angle-down"></i>
+                                                        </div>
+                                                    </a>
+                                                    <ul className="sidebar-submenu" style={{ display: "block" }}>
+                                                        <li>
+                                                            <a className="submenu-title active" href="#">
+                                                                color version
+                                                                <span className="sub-arrow">
+                                                                    <i className="fa fa-chevron-right"></i>
+                                                                </span>
+                                                                <div className="according-menu">
+                                                                    <i className="fa fa-angle-down"></i>
+                                                                </div>
+                                                            </a>
+                                                            <ul className="nav-sub-childmenu submenu-content" style={{ display: "block" }}>
+                                                                <li>
+                                                                    <a href="index.html">Layout Light</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="layout-dark.html" className="active">Layout Dark</a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>     
+                                                            <a className="submenu-title" href="#">
+                                                                Page layout
+                                                                <span className="sub-arrow">
+                                                                    <i className="fa fa-chevron-right"></i>
+                                                                </span>
+                                                                <div className="according-menu">
+                                                                    <i className="fa fa-angle-right"></i>
+                                                                </div>
+                                                            </a>
+                                                            <ul className="nav-sub-childmenu submenu-content" style={{ display: "none" }}>
+                                                                <li>
+                                                                    <a href="boxed.html">Boxed</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="layout-rtl.html">RTL</a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>
+                                                            <a href="hide-on-scroll.html">
+                                                                <span>Hide menu on Scroll</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>     
+                                                            <a className="submenu-title" href="#">
+                                                                Footers
+                                                                <span className="sub-arrow">
+                                                                    <i className="fa fa-chevron-right"></i>
+                                                                </span>
+                                                                <div className="according-menu">
+                                                                    <i className="fa fa-angle-right"></i>
+                                                                </div>
+                                                            </a>
+                                                            <ul className="nav-sub-childmenu submenu-content" style={{ display: "none" }}>
+                                                                <li>
+                                                                    <a href="footer-light.html">Footer Light</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="footer-dark.html">Footer Dark</a>
+                                                                </li>
+                                                            <li>
+                                                                <a href="footer-fixed.html">Footer Fixed</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li className="sidebar-list">
+                                                <a className="sidebar-link sidebar-title" href="http://support.pixelstrap.com/help-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-headphones">
+                                                        <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                                                        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                                                    </svg>
+                                                    <span>Raise Support</span>
+                                                    <div className="according-menu">
+                                                        <i className="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li className="sidebar-list">
+                                                <a className="sidebar-link sidebar-title" href="../document/index.html">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-file-text">
+                                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                                    </svg>
+                                                    <span>Documentation</span>
+                                                    <div className="according-menu">
+                                                        <i className="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </li>
                                         </div>
-                                      </a>
-                                      : ''}
-
-                                    {(childrenItem.type === 'link') ?
-                                      // <Link className={`${childrenItem.active ? 'active' : ''}`} 
-                                      //   onClick={() => toggletNavActive(childrenItem)}
-                                      // >
-                                        <a href="/testing">{props.t(childrenItem.title)}</a>
-                                      // </Link>
-                                      : ''}
-
-                                    {childrenItem.children ?
-                                      <ul className="nav-sub-childmenu submenu-content"
-                                        style={childrenItem.active ? { display: "block" } : { display: "none" }}
-                                      >
-                                        {childrenItem.children.map((childrenSubItem, key) =>
-                                          <li key={key}>
-                                            {(childrenSubItem.type === 'link') ?
-                                            //   <Link className={`${childrenSubItem.active ? 'active' : ''}`} 
-                                            //   onClick={() => toggletNavActive(childrenSubItem)}
-                                            // >
-                                              <a href="/hola">{props.t(childrenSubItem.title)}</a>
-                                            // </Link>}
-                                              : ''}
-                                          </li>
-                                        )}
-                                      </ul>
-                                      : ""}
-
-                                  </li>
-                                )
-                              })}
-                            </ul>
-                            : ''}
-                        </li>)}
-                    </Fragment>
-                  )}
-              </ul>
-            </div>
-            <div className="right-arrow" onClick={scrollToRight}><ArrowRight /></div>
-        </nav>
-      </div>
-    </Fragment>
-  );
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="simplebar-placeholder" style={{ width: "auto", height: "408px" }}></div>
+                        </div>
+                        <div className="simplebar-track simplebar-horizontal" style={{ visibility: "hidden" }}>
+                            <div className="simplebar-scrollbar simplebar-visible" style={{ width: "0px", display: "none" }}></div>
+                        </div>
+                        <div className="simplebar-track simplebar-vertical" style={{ visibility: "hidden" }}>
+                            <div className="simplebar-scrollbar simplebar-visible" style={{ height: "0px", display: "none" }}></div>
+                        </div>
+                    </ul>
+                </div>
+                <div className="right-arrow" id="right-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-arrow-right">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </div>
+            </nav>
+        </div>
+    </div>
+    )
 }
 
-export default translate(Sidebar);
+export default IndexSidebar;

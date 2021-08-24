@@ -1,17 +1,25 @@
-import React from 'react'
-import Sidebar from '../components/sidebar'
-import Header from '../components/header';
-import DefaultLayout from '../components/layouts/defaultLayout'
+import React from 'react';
+import { connect } from 'react-redux';
+import { decrementCounter, incrementCounter } from '../redux/actions/counterActions';
 
-const Index = () => {
+const IndexPage = ({ incrementCounter, decrementCounter, counter }) => {
+
     return (
-        <DefaultLayout
-            sidebar={<Sidebar/>}
-            header={<Header/>}
-        >
-            hkafdgasgsg
-        </DefaultLayout>
-    )
+        <div>
+            <button onClick={incrementCounter}>Increment</button>
+            <button onClick={decrementCounter}>Decrement</button>
+            <h1>{counter}</h1>
+        </div>
+    );
 }
 
-export default Index;
+const mapStateToProps = state => ({
+    counter: state.counter.value
+});
+
+const mapDispatchToProps = {
+    incrementCounter: incrementCounter,
+    decrementCounter: decrementCounter,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(IndexPage);
