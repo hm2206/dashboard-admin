@@ -1,28 +1,29 @@
-import React from 'react'
-import Image from 'next/image'
+import React, { useState } from 'react'
 import Navbar from '../navbar'
 import Sidebar from '../sidebar'
 import Footer from '../footer'
+import { ChevronUp } from 'react-feather'
 
-const IndexLayout = ({ children = null, title = "Hola a react" }) => {
+const IndexLayout = ({ children = null }) => {
+
+    const [wrapper, setWrapper] = useState(false)
+
+    const toggleWrapper = () => setWrapper(prev => (!prev));
 
     return (
         <>
             {/* <!-- tap on top starts--> */}
             <div className="tap-top">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-chevrons-up">
-                    <polyline points="17 11 12 6 7 11"></polyline>
-                    <polyline points="17 18 12 13 7 18"></polyline>
-                </svg>
+                <ChevronUp/>
             </div>
             {/* <!-- tap on tap ends--> */}
             {/* <!-- page-wrapper Start--> */}
             <div className="page-wrapper null compact-wrapper" id="pageWrapper">
-                <Navbar/>                   
+                <Navbar wrapper={wrapper} toggleWrapper={toggleWrapper}/>                   
                 {/* <!-- Page Body Start--> */}
                 <div className="page-body-wrapper horizontal-menu">
                     {/* <!-- Page Sidebar Start--> */}
-                    <Sidebar/>
+                    <Sidebar wrapper={wrapper} toggleWrapper={toggleWrapper}/>
                     {/* <!-- Page Sidebar Ends--> */}
                     <div className="page-body">
                         {/* <div className="container-fluid">

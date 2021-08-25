@@ -1,0 +1,21 @@
+[
+    {
+        "key": "general",
+        "text": "General",
+        "description": "Dashboards,Widgets & Layout",
+        "children": [
+            {
+                "key": "dash",
+                "text": "Home",
+                "info": "",
+                "type": "sub",
+                "children": [
+                    {
+                        "key": "title",
+                        "text": "Hola"
+                    }
+                ]
+            }
+        ]
+    }
+]
