@@ -1,0 +1,44 @@
+[
+    {
+        "key": "en",
+        "icon": "flag-icon-us",
+        "text": "English",
+        "prefix": "(US)"
+    },
+    {
+        "key": "de",
+        "icon": "flag-icon-de",
+        "text": "Deutsch",
+        "prefix": ""
+    },
+    {
+        "key": "es",
+        "icon": "flag-icon-es",
+        "text": "Español",
+        "prefix": ""
+    },
+    {
+        "key": "fr",
+        "icon": "flag-icon-fr",
+        "text": "Français",
+        "prefix": ""
+    },
+    {
+        "key": "pt",
+        "icon": "flag-icon-pt",
+        "text": "Português",
+        "prefix": "(BR)"
+    },
+    {
+        "key": "cn",
+        "icon": "flag-icon-cn",
+        "text": "简体中文",
+        "prefix": ""
+    },
+    {
+        "key": "ae",
+        "icon": "flag-icon-ae",
+        "text": "لعربية",
+        "prefix": "(ae)"
+    }
+]
