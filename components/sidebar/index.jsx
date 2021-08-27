@@ -2,10 +2,11 @@ import React, { Fragment } from 'react';
 import { ArrowRight, ArrowLeft, Grid, Home } from 'react-feather';
 import Link from 'next/link'
 import Image from 'next/image'
-import menus from '../../data/menu.json'
+import menus from '../../data/menu'
 import { connect } from 'react-redux'
 import { stateInitial, wrapperScreen } from '../../redux/thunks/screenThunk'
 import Show from '../utils/show'
+import Menu from './menu';
 
 const Sidebar = ({ wrapper, dark, wrapperScreen }) => {
   
@@ -42,47 +43,9 @@ const Sidebar = ({ wrapper, dark, wrapperScreen }) => {
                 </li>
                 {/* iter menu */}
                 {menus?.map((menu, index) =>
-                  <Fragment key={`item-menu-sidebar-${index}`}>
-                    <li className="sidebar-main-title">
-                      <div>
-                        <h6 className="lan-1">{menu?.text}</h6>
-                        <p className="lan-2">{menu?.description}</p>
-                      </div>
-                    </li>
-                    {/* sidebar list */}
-                    {menu?.children?.map((child, indexC) => 
-                      <li className="sidebar-list" key={`list-child-primary-${indexC}`}>
-                        {/* sub */}
-                        <a href="" className={`sidebar-link sidebar-title --active`}>
-                          {/* icono */}
-                          <Home/>
-                          {/* titulo */}
-                          <span className="lan-1">{child?.text}</span>
-                          {/* badge */}
-                          <label className="badge badge-warning">{child?.info}</label>
-                          {/* menu acordion */}
-                          <div className="according-menu">
-                              {true ?
-                                <i className="fa fa-angle-down"></i>
-                                : <i className="fa fa-angle-right"></i>
-                              }
-                            </div>
-                        </a>
-                        {/* sub menu */}
-                        <ul className="sidebar-submenu" >
-                          {child?.children?.map((item, indexI) => 
-                            <li key={`list-menu-item-child-${indexI}`}>
-                              <a href="javascript" className={`${true ? '--active' : ''}`}>{item?.text}
-                                <span className="sub-arrow">
-                                  <i className="fa fa-chevron-right"></i>
-                                </span>
-                              </a>
-                            </li>
-                          )}
-                        </ul>
-                      </li>   
-                    )}
-                  </Fragment>
+                  <Menu key={`list-menu-${index}`}
+                    menu={menu}
+                  />
                 )}
               </ul>
             </div>
