@@ -3,31 +3,10 @@ import LangBar from './langBar';
 import NotifyBar from './notifyBar';
 import UserBar from './userBar';
 import { Maximize } from 'react-feather';
+import { connect } from 'react-redux'
+import { stateInitial, toggleTheme } from '../../redux/thunks/screenThunk'
 
-const RightBar = () => {
-
-    const [current_theme, setCurrentTheme] = useState("light")
-
-    const defaultTheme = () => {
-        let theme = localStorage.getItem('theme');
-        if (!theme) {
-            theme = 'light';
-            localStorage.setItem('theme', theme);
-        }
-
-        toggleTheme(theme);
-    }
-
-    const toggleTheme = (theme = 'light') => {
-        localStorage.setItem('theme', theme);
-        document.body.className = theme;
-        setCurrentTheme(theme)
-    }
-
-    useEffect(() => {
-        defaultTheme()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+const RightBar = ({ dark, toggleTheme }) => {
 
     return (
         <div className="nav-right col-8 pull-right right-header p-0">
@@ -38,8 +17,8 @@ const RightBar = () => {
                 <NotifyBar/>
                 {/* toggle theme */}
                 <li>
-                    <div className="mode" onClick={() => toggleTheme(current_theme == 'light' ? 'dark-only' : 'light')}>
-                        <i className={`fa ${current_theme == 'light' ? 'fa-moon-o' : 'fa-lightbulb-o'}`}></i>
+                    <div className="mode" onClick={toggleTheme}>
+                        <i className={`fa ${dark ? 'fa-lightbulb-o' : 'fa-moon-o'}`}></i>
                     </div>
                 </li>
                 <li className="maximize">
@@ -54,4 +33,12 @@ const RightBar = () => {
     )
 }
 
-export default RightBar;
+const mapStateToProps = (state = { screen: stateInitial }) => ({
+    ...state.screen
+})
+
+const mapDispatchToProps = {
+    toggleTheme,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RightBar);

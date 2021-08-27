@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import Navbar from '../navbar'
 import Sidebar from '../sidebar'
 import Footer from '../footer'
 import { ChevronUp } from 'react-feather'
+import { connect } from 'react-redux'
+import { stateInitial, resizeScreen } from '../../redux/thunks/screenThunk'
 
-const IndexLayout = ({ children = null }) => {
+const IndexLayout = ({ children = null, resizeScreen }) => {
 
-    const [wrapper, setWrapper] = useState(false)
+    const isObjectWindow = typeof window == 'object';
 
-    const toggleWrapper = () => setWrapper(prev => (!prev));
+    useEffect(() => {
+        if (isObjectWindow) resizeScreen()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isObjectWindow])
+
+    useEffect(() => {
+        if (isObjectWindow) window?.addEventListener('resize', resizeScreen);
+        return () => isObjectWindow ? window?.removeEventListener('resize', resizeScreen) : null
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isObjectWindow]);
 
     return (
         <>
@@ -19,11 +30,11 @@ const IndexLayout = ({ children = null }) => {
             {/* <!-- tap on tap ends--> */}
             {/* <!-- page-wrapper Start--> */}
             <div className="page-wrapper null compact-wrapper" id="pageWrapper">
-                <Navbar wrapper={wrapper} toggleWrapper={toggleWrapper}/>                   
+                <Navbar/>                   
                 {/* <!-- Page Body Start--> */}
                 <div className="page-body-wrapper horizontal-menu">
                     {/* <!-- Page Sidebar Start--> */}
-                    <Sidebar wrapper={wrapper} toggleWrapper={toggleWrapper}/>
+                    <Sidebar/>
                     {/* <!-- Page Sidebar Ends--> */}
                     <div className="page-body">
                         {/* <div className="container-fluid">
@@ -63,4 +74,10 @@ const IndexLayout = ({ children = null }) => {
     );
 }
 
-export default IndexLayout;
+const mapStateToProps = (state = { screen: stateInitial }) => ({
+    ...state.screen
+})
+
+const mapDispatchToProps = { resizeScreen }
+
+export default connect(mapStateToProps, mapDispatchToProps)(IndexLayout);

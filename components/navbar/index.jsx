@@ -2,8 +2,10 @@ import React from 'react';
 import RightBar from './rightBar'
 import Image from 'next/image'
 import { Menu } from 'react-feather'
+import { connect } from 'react-redux'
+import { stateInitial, wrapperScreen, toggleTheme } from '../../redux/thunks/screenThunk'
 
-const NavbarIndex = ({ wrapper = false, toggleWrapper = null }) => {
+const NavbarIndex = ({ wrapper, dark, wrapperScreen, toggleTheme }) => {
 
     return (
         <div className={`page-header ${wrapper ? 'close_icon' : ''}`}>
@@ -27,7 +29,7 @@ const NavbarIndex = ({ wrapper = false, toggleWrapper = null }) => {
                 <div className="header-logo-wrapper col-auto p-0">
                     <div className="logo-wrapper"><a href="index.html" >
                         <Image className="img-fluid" src={require("../../assets/images/logo/logo.png")} alt=""/></a></div>
-                    <div className="toggle-sidebar" checked="checked" onClick={toggleWrapper}>
+                    <div className="toggle-sidebar" checked="checked" onClick={wrapperScreen}>
                         <Menu/>
                     </div>
                 </div>
@@ -43,4 +45,13 @@ const NavbarIndex = ({ wrapper = false, toggleWrapper = null }) => {
     )
 }
 
-export default NavbarIndex;
+const mapStateToProps = (state = { screen: stateInitial }) => ({
+    ...state.screen
+})
+
+const mapDispatchToProps = {
+    wrapperScreen,
+    toggleTheme,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavbarIndex);
