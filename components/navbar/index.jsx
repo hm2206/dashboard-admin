@@ -2,10 +2,16 @@ import React from 'react';
 import RightBar from './rightBar'
 import Image from 'next/image'
 import { Menu } from 'react-feather'
-import { connect } from 'react-redux'
-import { stateInitial, wrapperScreen, toggleTheme } from '../../redux/thunks/screenThunk'
+import { wrapperScreen } from '../../redux/thunks/screenThunk'
+import { connect, useDispatch, useSelector } from 'react-redux'
 
-const NavbarIndex = ({ wrapper, dark, wrapperScreen, toggleTheme }) => {
+const NavbarIndex = () => {
+
+    // redux
+    const dispatch = useDispatch();
+    const { wrapper } = useSelector(store => store?.screen);
+
+    const handleWrapperScreen = () => dispatch(wrapperScreen())
 
     return (
         <div className={`page-header ${wrapper ? 'close_icon' : ''}`}>
@@ -29,7 +35,7 @@ const NavbarIndex = ({ wrapper, dark, wrapperScreen, toggleTheme }) => {
                 <div className="header-logo-wrapper col-auto p-0">
                     <div className="logo-wrapper"><a href="index.html" >
                         <Image className="img-fluid" src={require("../../assets/images/logo/logo.png")} alt=""/></a></div>
-                    <div className="toggle-sidebar" checked="checked" onClick={wrapperScreen}>
+                    <div className="toggle-sidebar" checked="checked" onClick={handleWrapperScreen}>
                         <Menu/>
                     </div>
                 </div>
@@ -45,13 +51,4 @@ const NavbarIndex = ({ wrapper, dark, wrapperScreen, toggleTheme }) => {
     )
 }
 
-const mapStateToProps = (state = { screen: stateInitial }) => ({
-    ...state.screen
-})
-
-const mapDispatchToProps = {
-    wrapperScreen,
-    toggleTheme,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NavbarIndex);
+export default connect(state => state)(NavbarIndex)

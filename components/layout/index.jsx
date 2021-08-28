@@ -1,15 +1,19 @@
 import React, { useEffect } from 'react'
 import Navbar from '../navbar'
-import Breadcrumb from './breadcrumb'
 import Sidebar from '../sidebar'
 import Footer from '../footer'
 import { ChevronUp } from 'react-feather'
-import { connect } from 'react-redux'
-import { stateInitial, resizeScreen } from '../../redux/thunks/screenThunk'
+import { resizeScreen } from '../../redux/thunks/screenThunk'
+import { useDispatch } from 'react-redux'
 
-const IndexLayout = ({ children = null, resizeScreen }) => {
+const IndexLayout = ({ children = null }) => {
+
+    // redux
+    const dispatch = useDispatch()
 
     const isObjectWindow = typeof window == 'object';
+
+    const handleResize = () => dispatch(resizeScreen())
 
     useEffect(() => {
         if (isObjectWindow) resizeScreen()
@@ -17,8 +21,8 @@ const IndexLayout = ({ children = null, resizeScreen }) => {
     }, [isObjectWindow])
 
     useEffect(() => {
-        if (isObjectWindow) window?.addEventListener('resize', resizeScreen);
-        return () => isObjectWindow ? window?.removeEventListener('resize', resizeScreen) : null
+        if (isObjectWindow) window?.addEventListener('resize', handleResize);
+        return () => isObjectWindow ? window?.removeEventListener('resize', handleResize) : null
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isObjectWindow]);
 
@@ -50,10 +54,4 @@ const IndexLayout = ({ children = null, resizeScreen }) => {
     );
 }
 
-const mapStateToProps = (state = { screen: stateInitial }) => ({
-    ...state.screen
-})
-
-const mapDispatchToProps = { resizeScreen }
-
-export default connect(mapStateToProps, mapDispatchToProps)(IndexLayout);
+export default IndexLayout;
