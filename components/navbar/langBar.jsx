@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import langs from '../../data/langs.json';
+import React, { useState, useEffect } from 'react';
+import { selectLangs } from '../../data/lang/index.js';
 import Show from '../utils/show'
+import { useSelector, useDispatch } from 'react-redux'
+import { changelang } from '../../redux/thunks/languageThunk'
 
 const LangBar = () => {
+
+    // redux
+    const dispatch = useDispatch();
+    const { lang } = useSelector(store => store?.language);
 
     const [show_menu, setShowMenu] = useState(false);
     const [current_lang, setCurrentLang] = useState({});
@@ -10,19 +16,12 @@ const LangBar = () => {
     const toggleMenu = () => setShowMenu(prev => (!prev))
 
     const handleSelectLang = (key) => {
-        let result = langs.find(obj => obj.key == key);
+        let result = selectLangs.find(obj => obj.key == key);
         setCurrentLang(result || {});
+        dispatch(changelang(key))
     }
 
-    const handleDefaultLang = () => {
-        let local_lang = localStorage.getItem('lang');
-        if (!local_lang) {
-            local_lang = 'en';
-            localStorage.setItem('lang', local_lang);
-        }
-
-        handleSelectLang(local_lang);
-    }
+    const handleDefaultLang = () => handleSelectLang(lang);
 
     useEffect(() => {
         handleDefaultLang()
@@ -32,7 +31,7 @@ const LangBar = () => {
     const isObject = Object.keys(current_lang).length;
 
     return (
-        <li className="language-nav">
+        <li className="language-nav list-simple">
             <div className={`translate_wrapper ${show_menu ? 'active' : ''}`}>
                 <div className="current_lang">
                     <div className="lang" onClick={toggleMenu}>
@@ -45,7 +44,7 @@ const LangBar = () => {
                     </div>
                 </div>
                 <div className={`more_lang ${show_menu ? 'active' : ''}`}>
-                    {langs?.map((lang, index) => 
+                    {selectLangs?.map((lang, index) => 
                         <div className="lang" key={`lang-${index}`}
                             onClick={() => handleSelectLang(lang?.key)}
                         >
