@@ -1,5 +1,7 @@
 import React from 'react';
 import Layout from '../components/layout'
+import { connect } from 'react-redux';
+import { authorize } from '../helpers/authStaticProps'
 
 const DashBoard = () => {
     
@@ -10,4 +12,6 @@ const DashBoard = () => {
     )
 }
 
-export default DashBoard;
+export const getStaticProps = authorize
+
+export default connect(store => store)(DashBoard);
