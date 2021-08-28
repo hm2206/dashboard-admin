@@ -3,12 +3,12 @@ import { Users, Database, Layers } from 'react-feather';
 const menus =  [
     {
         key: "general",
-        text: "Auth",
-        description: "Personas, Usuarios, & Roles",
+        text: "layout.menu.auth.title",
+        description: "layout.menu.auth.description",
         children: [
             {
                 key: "/auth/people",
-                text: "Personas",
+                text: "layout.menu.auth.people",
                 info: "",
                 type: "link",
                 icon: <Database/>,
@@ -16,7 +16,7 @@ const menus =  [
             },
             {
                 key: "/auth/users",
-                text: "Usuarios",
+                text: "layout.menu.auth.users",
                 info: "",
                 type: "link",
                 icon: <Users/>,
@@ -24,7 +24,7 @@ const menus =  [
             },
             {
                 key: "/auth/roles",
-                text: "Roles",
+                text: "layout.menu.auth.roles",
                 info: "",
                 type: "link",
                 icon: <Layers/>,

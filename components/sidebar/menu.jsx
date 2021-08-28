@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Show from '../utils/show';
 import Link from 'next/link'
 
-const Menu = ({ menu }) => {
+const Menu = ({ menu, t }) => {
 
     const NavLink = ({ child }) => {
         return (
@@ -11,7 +11,7 @@ const Menu = ({ menu }) => {
                     {/* icono */}
                     {child.icon || null}
                     {/* titulo */}
-                    <span className="lan-1">{child?.text}</span>
+                    <span className="lan-1">{t(child?.text)}</span>
                     {/* badge */}
                     <label className="badge badge-warning">{child?.info}</label>
                 </a>
@@ -26,7 +26,7 @@ const Menu = ({ menu }) => {
                     {/* icono */}
                     {child.icon || null}
                     {/* titulo */}
-                    <span className="lan-1">{child?.text}</span>
+                    <span className="lan-1">{t(child?.text)}</span>
                     {/* badge */}
                     <label className="badge badge-warning">{child?.info}</label>
                     {/* menu acordion */}
@@ -41,7 +41,7 @@ const Menu = ({ menu }) => {
                 <ul className="sidebar-submenu" >
                     {child?.children?.map((item, indexI) => 
                     <li key={`list-menu-item-child-${indexI}`}>
-                        <a href="javascript" className={`${true ? '--active' : ''}`}>{item?.text}
+                        <a href="javascript" className={`${true ? '--active' : ''}`}>{t(item?.text)}
                         <span className="sub-arrow">
                             <i className="fa fa-chevron-right"></i>
                         </span>
@@ -57,8 +57,8 @@ const Menu = ({ menu }) => {
         <Fragment>
             <li className="sidebar-main-title">
                 <div>
-                <h6 className="lan-1">{menu?.text}</h6>
-                <p className="lan-2">{menu?.description}</p>
+                <h6 className="lan-1">{t(menu?.text)}</h6>
+                <p className="lan-2">{t(menu?.description)}</p>
                 </div>
             </li>
             {/* sidebar list */}

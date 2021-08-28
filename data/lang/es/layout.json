@@ -1,0 +1,16 @@
+{
+    "setting": {
+        "account": "Cuenta",
+        "setting": "Ajustes",
+        "logout": "Salir"
+    },
+    "menu": {
+            "auth": {
+            "title": "Auth",
+            "description": "Personas, Usuarios, & Roles",
+            "people": "Personas",
+            "users": "Usuarios",
+            "roles": "Roles"
+        }
+    }
+}

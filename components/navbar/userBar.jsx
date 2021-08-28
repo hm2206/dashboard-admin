@@ -1,23 +1,24 @@
 import React from 'react';
 import Image from 'next/image'
 import { User, Settings, LogOut } from 'react-feather'
+import { translate } from 'react-switch-lang'
 
-const UserBar = () => {
+const UserBar = ({ t }) => {
 
     const options = [
         { 
             key: "account",
-            text: "Cuenta",
+            text: "layout.setting.account",
             icon: <User/>
         },
         { 
             key: "setting",
-            text: "Ajustes",
+            text: "layout.setting.setting",
             icon: <Settings/>
         },
         { 
             key: "logout",
-            text: "Salír",
+            text: "layout.setting.logout",
             icon: <LogOut/>
         },
     ]
@@ -32,7 +33,7 @@ const UserBar = () => {
             <ul className="profile-dropdown onhover-show-div">
                 {options?.map((opt, index) => 
                     <li key={`item-menu-user-${index}`}>
-                        <a href="#">{opt?.icon} <span>{opt?.text} </span></a>
+                        <a href="#">{opt?.icon} <span>{t(opt?.text)} </span></a>
                     </li>    
                 )}
                 {/* <li><a href="#" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg><span>Inbox</span></a></li>
@@ -44,4 +45,4 @@ const UserBar = () => {
     )
 }
 
-export default UserBar;
+export default translate(UserBar);

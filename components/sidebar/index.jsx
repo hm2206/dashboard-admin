@@ -1,14 +1,21 @@
 import React, { Fragment } from 'react';
-import { ArrowRight, ArrowLeft, Grid, Home } from 'react-feather';
+import { ArrowRight, ArrowLeft, Grid } from 'react-feather';
 import Link from 'next/link'
 import Image from 'next/image'
 import menus from '../../data/menu'
-import { connect } from 'react-redux'
-import { stateInitial, wrapperScreen } from '../../redux/thunks/screenThunk'
+import { connect, useSelector, useDispatch } from 'react-redux'
+import { wrapperScreen } from '../../redux/thunks/screenThunk'
 import Show from '../utils/show'
 import Menu from './menu';
+import { translate } from 'react-switch-lang'
 
-const Sidebar = ({ wrapper, dark, wrapperScreen }) => {
+const Sidebar = ({ t }) => {
+
+  // redux
+  const dispatch = useDispatch()
+  const { wrapper, dark } = useSelector(store => store.screen)
+
+  const handleWrapperScreen = () => dispatch(wrapperScreen())
   
   return (
     <Fragment>
@@ -24,8 +31,8 @@ const Sidebar = ({ wrapper, dark, wrapperScreen }) => {
               </Show>
             </a>
           </Link>
-          <div className="back-btn cursor-pointer" onClick={wrapperScreen}><i className="fa fa-angle-left"></i></div>
-          <div className="toggle-sidebar" onClick={wrapperScreen}>
+          <div className="back-btn cursor-pointer" onClick={handleWrapperScreen}><i className="fa fa-angle-left"></i></div>
+          <div className="toggle-sidebar" onClick={handleWrapperScreen}>
             <Grid className="status_toggle middle sidebar-toggle" />
           </div>
         </div>
@@ -44,6 +51,7 @@ const Sidebar = ({ wrapper, dark, wrapperScreen }) => {
                 {/* iter menu */}
                 {menus?.map((menu, index) =>
                   <Menu key={`list-menu-${index}`}
+                    t={t}
                     menu={menu}
                   />
                 )}
@@ -56,12 +64,4 @@ const Sidebar = ({ wrapper, dark, wrapperScreen }) => {
   );
 }
 
-const mapStateToProps = (state = { screen: stateInitial }) => ({
-  ...state.screen
-})
-
-const mapDispatchToProps = {
-  wrapperScreen
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
+export default connect(state => state)(translate(Sidebar));

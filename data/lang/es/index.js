@@ -1,8 +1,10 @@
 import formLogin from './auth/formLogin.json'
+import layout from './layout.json'
 
 const es = {
     langs: {
         formLogin,
+        layout,
     },
     option: {
         "key": "es",
