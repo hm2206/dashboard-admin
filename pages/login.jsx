@@ -21,6 +21,6 @@ const PageLogin = () => {
     )
 }
 
-export const getStaticProps = guest
+PageLogin.getInitialProps = guest('Login')
 
 export default connect(store => store)(PageLogin);

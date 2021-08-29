@@ -1,6 +1,6 @@
 import { wrapper } from '../redux/store'
 
-export const authorize = wrapper.getStaticProps(store => async () => {
+export const authorize = (title = '') => wrapper.getStaticProps(store => async () => {
     const { auth } = store.getState()
     // response error
     if (!auth.logged) return {
@@ -10,10 +10,10 @@ export const authorize = wrapper.getStaticProps(store => async () => {
         }
     }
     // add nextProps
-    return { props: auth }
+    return { props: { auth, title } }
 })
 
-export const guest = wrapper.getStaticProps(store => async () => {
+export const guest = (title = '') => wrapper.getStaticProps(store => async () => {
     const { auth } = store.getState()
     // response error
     if (auth.logged) return {
@@ -23,5 +23,5 @@ export const guest = wrapper.getStaticProps(store => async () => {
         }
     }
     // add nextProps
-    return { props: auth }
+    return { props: { auth, title } }
 })

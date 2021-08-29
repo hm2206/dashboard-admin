@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import RightBar from './rightBar'
 import Image from 'next/image'
 import { Menu } from 'react-feather'
-import { wrapperScreen } from '../../redux/thunks/screenThunk'
+import { wrapperScreen, defaultTheme } from '../../redux/thunks/screenThunk'
 import { connect, useDispatch, useSelector } from 'react-redux'
 
 const NavbarIndex = () => {
@@ -12,6 +12,11 @@ const NavbarIndex = () => {
     const { wrapper } = useSelector(store => store?.screen);
 
     const handleWrapperScreen = () => dispatch(wrapperScreen())
+
+    useEffect(() => {
+        dispatch(defaultTheme())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className={`page-header ${wrapper ? 'close_icon' : ''}`}>
