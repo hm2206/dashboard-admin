@@ -3,13 +3,26 @@ import { TabContent, TabPane, Label, FormGroup, Form, Input, Button } from 'reac
 import { Eye, EyeOff } from 'react-feather'
 import { translate } from 'react-switch-lang'
 import LangBar from '../navbar/langBar'
+import LoginRequest from '../../request/auth/loginRequest'
+import { setCookie } from 'nookies'
+import { useRouter } from 'next/router'
+import { Loader } from 'react-feather'
+
+const loginRequest = new LoginRequest();
 
 const FormLogin = ({ t }) => {
 
+    const router = useRouter();
+
+    const [errors, setErrors] = useState({})
     const [form, setForm] = useState({})
     const [show_password, setShowPassword] = useState(false);
+    const [current_loading, setCurrentLoading] = useState(false)
 
-    const handleInput = ({ name, value }) => setForm((prev) => ({ ...prev, [name]: value }))
+    const handleInput = ({ name, value }) => {
+        setForm(prev => ({ ...prev, [name]: value }))
+        setErrors(prev => ({ ...prev, [name]: [] }))
+    }
 
     const togglePassword = () => setShowPassword((prev) => (!prev))
 
@@ -18,9 +31,28 @@ const FormLogin = ({ t }) => {
         return show_password ? <EyeOff {...propsPassword}/> : <Eye {...propsPassword}/>
     }, [show_password])
 
-    const handleLogin = (e) => {
+    const canSubmit = useMemo(() => {
+        let required = ['email', 'password'];
+        for (let attr of required) {
+            let value = form[attr]
+            if (!value) return false;
+        }
+        return true
+    }, [form]);
+
+    const handleLogin = async (e) => {
         e.preventDefault();
-        alert('Logged')
+        setCurrentLoading(true)
+        await loginRequest.login(form)
+        .then(res => {
+            let { token } = res.data;
+            setCookie(null, 'auth_token', token);
+            router.push('/');
+        })
+        .catch(err => {
+            setCurrentLoading(false)
+            setErrors(err.errors);
+        })
     }
 
     return (
@@ -41,28 +73,33 @@ const FormLogin = ({ t }) => {
 
                         <FormGroup>
                             <Label className="col-form-label">{t('formLogin.email')}</Label>
-                            <Input className="form-control" 
+                            <Input className={`form-control`} 
                                 type="email"
                                 name="email"
                                 value={`${form?.email || ''}`}
                                 onChange={(e) => handleInput(e.target)}
                                 placeholder="example@gmail.com"
+                                disabled={current_loading}
                             />
+                            <label>{errors?.email?.[0] || ''}</label>
                         </FormGroup>
 
                         <FormGroup>
                             <Label className="col-form-label">{t('formLogin.password')}</Label>
-                            <Input className="form-control"
+                            <Input className={`form-control`}
                                 name="password"
                                 type={show_password ? 'text' : 'password'}
                                 value={`${form?.password || ''}`}
                                 onChange={(e) => handleInput(e.target)}
                                 placeholder="*********"
+                                disabled={current_loading}
                             />
                             
                             <div className="show-hide pt-2">
                                 {componentTooglePassword}
                             </div>
+
+                            <label>{errors?.password?.[0] || ''}</label>
                         </FormGroup>
 
                         <div className="form-group mb-0">
@@ -73,9 +110,9 @@ const FormLogin = ({ t }) => {
                         <div className="form-group mb-0 mt-5">
                             <Button color="primary" 
                                 className="btn-block"
-                                disabled={!form.email || !form.password}
+                                disabled={!canSubmit || current_loading}
                             >
-                                {t('formLogin.button')}
+                                {current_loading ? <Loader/> : t('formLogin.button')} 
                             </Button>
                         </div>
                         

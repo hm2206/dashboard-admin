@@ -1,6 +1,11 @@
 import { wrapper } from '../redux/store'
+import nookies from 'nookies'
+import { setLogged } from '../redux/thunks/authThunk'
 
-export const authorize = (title = '') => wrapper.getStaticProps(store => async () => {
+export const authorize = wrapper.getServerSideProps(store => async (ctx) => {
+    const { auth_token } = nookies.get(ctx);
+    const isLogged = auth_token ? true : false;
+    store.dispatch(setLogged(isLogged));
     const { auth } = store.getState()
     // response error
     if (!auth.logged) return {
@@ -10,10 +15,13 @@ export const authorize = (title = '') => wrapper.getStaticProps(store => async (
         }
     }
     // add nextProps
-    return { props: { auth, title } }
+    return { props: { auth } }
 })
 
-export const guest = (title = '') => wrapper.getStaticProps(store => async () => {
+export const guest = wrapper.getServerSideProps(store => async (ctx) => {
+    const { auth_token } = nookies.get(ctx);
+    const isLogged = auth_token ? true : false;
+    store.dispatch(setLogged(isLogged));
     const { auth } = store.getState()
     // response error
     if (auth.logged) return {
@@ -23,5 +31,5 @@ export const guest = (title = '') => wrapper.getStaticProps(store => async () =>
         }
     }
     // add nextProps
-    return { props: { auth, title } }
+    return { props: { auth } }
 })

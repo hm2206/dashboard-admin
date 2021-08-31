@@ -20,7 +20,7 @@ const UserEdit = () => {
                 <Form>
                     <Row className="mb-2">
                         <div className="col-auto">
-                            <Media className="img-70 rounded-circle" alt="" src={require("../../../assets/images/user/7.jpg")} />
+                            <Media className="img-70 rounded-circle" alt="" src="/image/7.jpg" />
                         </div>
                         <Col>
                             <h3 className="mb-1">MarkJecno</h3>

@@ -9,7 +9,7 @@ import thunk from "redux-thunk"
 import logger from "redux-logger"
 
 
-const middleware = applyMiddleware(thunk, logger)
+const middleware = applyMiddleware(thunk)
 
 
 const persistConfig = {
