@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Container, Row, Col } from 'reactstrap'
+import Image from 'next/image'
 import { X, Layers, GitPullRequest, User, Users, UserMinus, UserCheck, Airplay, Zap,Heart,Inbox, Sliders } from 'react-feather'
 
 const Leftbar = () => {
@@ -9,8 +10,8 @@ const Leftbar = () => {
       <div className="header-logo-wrapper" id="out_side_click">
         <div className="logo-wrapper">
           <a href="#">
-            <img className="img-fluid for-light" src={require("../../styles/images/logo/logo.png")} alt="" />
-            <img className="img-fluid for-dark" src={require("../../styles/images/logo/logo_dark.png")} alt="" />
+            <Image className="img-fluid for-light" src={require("../../styles/images/logo/logo.png")} alt="" />
+            <Image className="img-fluid for-dark" src={require("../../styles/images/logo/logo_dark.png")} alt="" />
           </a>
         </div>
         <div className="toggle-sidebar">

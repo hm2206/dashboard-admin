@@ -3,31 +3,32 @@ import { createStore, applyMiddleware } from 'redux'
 import { persistStore, persistReducer } from 'redux-persist'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
-import storage from 'redux-persist/lib/storage'
 import rootReducer from './thunks/rootReducer'
 import thunk from "redux-thunk"
-import logger from "redux-logger"
 
 
 const middleware = applyMiddleware(thunk)
 
 
-const persistConfig = {
+const isClient = typeof window !== 'undefined'
+
+
+const persistConfig = (storage) => ({
     key: 'root',
     version: 1,
     whitelist: ['language'],
     blacklist: [],
     storage,
     stateReconciler: hardSet,
-}
+})
 
 
-const makeStore = ({ req }) => {
-    let isServer = Object.keys(req || {}).length ? true : false
-    if (isServer) {
+const makeStore = () => {
+    if (!isClient) {
         return createStore(rootReducer, composeWithDevTools(middleware))
     } else {
-        const persistedReducer = persistReducer(persistConfig, rootReducer)
+        const storage = require('redux-persist/lib/storage').default
+        const persistedReducer = persistReducer(persistConfig(storage), rootReducer)
         const store = createStore(persistedReducer, composeWithDevTools(middleware))
         store.__PERSISTOR = persistStore(store)
         return store;

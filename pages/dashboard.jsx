@@ -12,6 +12,6 @@ const DashBoard = () => {
     )
 }
 
-export const getStaticProps = authorize()
+export const getServerSideProps = authorize
 
 export default connect(store => store)(DashBoard);

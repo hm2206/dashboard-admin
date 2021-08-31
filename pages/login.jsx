@@ -1,7 +1,6 @@
 import React from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import FormLogin from '../components/auth/formLogin';
-import { connect } from 'react-redux'
 import { guest } from '../helpers/authStaticProps'
 
 const PageLogin = () => {
@@ -23,4 +22,4 @@ const PageLogin = () => {
 
 export const getServerSideProps = guest
 
-export default connect(store => store)(PageLogin);
+export default PageLogin;
