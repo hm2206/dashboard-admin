@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import FormLogin from '../components/auth/formLogin';
-import { guest } from '../helpers/authStaticProps'
+import { guest } from '../helpers/authServerSideProps'
 
 const PageLogin = () => {
 

@@ -1,4 +1,3 @@
-
 import urlJoin from 'url-join'
 
 class BaseRequest {
@@ -10,9 +9,19 @@ class BaseRequest {
 
     root = "/"
 
+    translate = null
+
     codeErrors = {};
 
-    defaultMessage = "";
+    defaultErrors = {
+        ERR_CONNECTION_REFUSED: "errors.ERR_CONNECTION_REFUSED"
+    }
+
+    defaultMessage = "errors.DEFAULT";
+
+    constructor(translate = null) {
+        this.translate = translate
+    }
 
     requestGet(url = '', config = {}) {
         return new Promise(async (resolver, reject) => {
@@ -33,17 +42,22 @@ class BaseRequest {
     onError(err) {
         let response = err.response || {};
         let objectError = {};
+        let codeErrors = Object.assign(this.defaultErrors, this.codeErrors)
         if (Object.keys(response).length) {
-            let message = this.codeErrors[response.data.code] || this.defaultMessage
+            let tmpMessage = codeErrors[response.data.code] || this.defaultMessage
+            let message = typeof this.translate == 'function' ? this.translate(tmpMessage) : tmpMessage
             objectError.message = message;
             objectError.code = response.data.code || 'ERR';
             objectError.errors = response.data.errors || {};
             return objectError;
         }
-    
-        objectError.message = this.defaultMessage;
+        
         objectError.errors = {}
-        return err
+        objectError.message = typeof this.translate == 'function' 
+            ?   this.translate(this.defaultMessage) 
+            :   this.defaultMessage;
+
+        return objectError
     }
 
 }

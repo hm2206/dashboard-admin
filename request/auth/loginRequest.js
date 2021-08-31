@@ -10,8 +10,6 @@ class LoginRequest extends BaseRequest {
         "E_INVALID_AUTH_UID": "La cuenta de usuario no existe"
     }
 
-    defaultMessage = "No se pudó iniciar sesión"
-
     login(data = {}) {
         return this.requestPost('/login', data)
     }

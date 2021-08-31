@@ -7,12 +7,13 @@ import LoginRequest from '../../request/auth/loginRequest'
 import { setCookie } from 'nookies'
 import { useRouter } from 'next/router'
 import { Loader } from 'react-feather'
-
-const loginRequest = new LoginRequest();
+import Swal from 'sweetalert2';
 
 const FormLogin = ({ t }) => {
 
     const router = useRouter();
+
+    const loginRequest = new LoginRequest(t);
 
     const [errors, setErrors] = useState({})
     const [form, setForm] = useState({})
@@ -50,6 +51,7 @@ const FormLogin = ({ t }) => {
             router.push('/');
         })
         .catch(err => {
+            Swal.fire({ icon: 'warning', text: err.message })
             setCurrentLoading(false)
             setErrors(err.errors);
         })

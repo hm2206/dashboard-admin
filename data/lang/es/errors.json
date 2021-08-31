@@ -1,0 +1,4 @@
+{
+    "DEFAULT": "Algo salió mal, intenta de nuevo",
+    "ERR_CONNECTION_REFUSED": "La conexión ha sido rechazada"
+}

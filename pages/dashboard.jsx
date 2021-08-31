@@ -1,7 +1,6 @@
 import React from 'react';
 import Layout from '../components/layout'
-import { connect } from 'react-redux';
-import { authorize } from '../helpers/authStaticProps'
+import { authorize } from '../helpers/authServerSideProps'
 
 const DashBoard = () => {
     
@@ -14,4 +13,4 @@ const DashBoard = () => {
 
 export const getServerSideProps = authorize
 
-export default connect(store => store)(DashBoard);
+export default DashBoard;
