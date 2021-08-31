@@ -24,6 +24,6 @@ const IndexPage = () => (
     </Layout>
 )
 
-export const getServerSideProps = authorize
+IndexPage.getInitialProps = authorize
 
-export default IndexPage
+export default IndexPage;

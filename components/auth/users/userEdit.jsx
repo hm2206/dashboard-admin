@@ -1,7 +1,10 @@
 import React from 'react';
 import { Row, Col, Card, CardHeader, CardBody, Media, Form, FormGroup, Label, Input } from 'reactstrap'
+import { useSelector } from 'react-redux'
 
 const UserEdit = () => {
+
+    const { user } = useSelector(store => store?.auth)
 
     return (
         <Card>
@@ -23,7 +26,7 @@ const UserEdit = () => {
                             <Media className="img-70 rounded-circle" alt="" src="/image/7.jpg" />
                         </div>
                         <Col>
-                            <h3 className="mb-1">MarkJecno</h3>
+                            <h3 className="mb-1">{user?.person?.fullname}</h3>
                             <p className="mb-4">Designer</p>
                         </Col>
                     </Row>

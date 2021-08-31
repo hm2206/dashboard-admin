@@ -2,8 +2,11 @@ import React from 'react';
 import Image from 'next/image'
 import { User, Settings, LogOut } from 'react-feather'
 import { translate } from 'react-switch-lang'
+import { useSelector, connect } from 'react-redux';
 
 const UserBar = ({ t }) => {
+
+    const { user } = useSelector(store => store?.auth)
 
     const options = [
         { 
@@ -26,7 +29,7 @@ const UserBar = ({ t }) => {
     return (
         <li className="profile-nav onhover-dropdown p-0 me-0">
             <div className="media profile-media"><Image className="b-r-10" src={require("../../assets/images/dashboard/profile.jpg")} alt=""/>
-            <div className="media-body"><span>Emay Walter</span>
+            <div className="media-body"><span>{user?.username}</span>
                 <p className="mb-0 font-roboto">Admin <i className="middle fa fa-angle-down"></i></p>
             </div>
             </div>
@@ -45,4 +48,4 @@ const UserBar = ({ t }) => {
     )
 }
 
-export default translate(UserBar);
+export default connect(store => store)(translate(UserBar));

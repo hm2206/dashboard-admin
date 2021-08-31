@@ -1,4 +1,5 @@
 import sessiontStorage from 'sessionstorage'
+import { HYDRATE } from 'next-redux-wrapper'
 
 // Action types
 export const RESIZE_SCREEN = 'RESIZE_SCREEN';
@@ -39,12 +40,14 @@ const limit = 1350;
 // Reducer
 export const screeenReducer = (state = stateInitial, action) => {
     switch (action.type) {
+        case HYDRATE:
+            return { ...state, ...action.payload }
         case RESIZE_SCREEN:
             state.width = window.innerWidth
             state.height = window.innerHeight
             if (limit >= state.width) state.wrapper = true;
             else state.wrapper = false;
-            return state;
+            return  { ...state };
         case WRAPPER_SCREEN:
             state.wrapper = !state.wrapper;
             return state;
@@ -56,8 +59,8 @@ export const screeenReducer = (state = stateInitial, action) => {
             state.dark = !state.dark;
             document.body.className = state.dark ? 'dark-only' : 'light'
             sessiontStorage.setItem('dark', state.dark ? 1 : 0)
-            return state;
+            return { ...state };
         default:
-            return state;
+            return { ...state };
     }
 }

@@ -1,3 +1,4 @@
+import { HYDRATE } from 'next-redux-wrapper'
 
 // Action types
 export const SET_LOGGED = 'SET_LOGGED'
@@ -25,23 +26,27 @@ export const setUser = (newUser = {}) => ({
 export const stateInitial = {
     logged: false,
     token: null,
-    user: {}
+    user: {
+        person: {}
+    }
 }
 
 
 // reducers
 export const authReducer = (state = stateInitial, action) => {
     switch (action.type) {
+        case HYDRATE:
+            return { ...state, ...action.payload }
         case SET_LOGGED:
             state.logged = action.payload
-            return state;
+            return { ...state };
         case SET_TOKEN:
             state.token = action.payload
-            return state;
+            return { ...state };
         case SET_USER:
             state.user = action.payload
-            return state; 
+            return { ...state }; 
         default:
-            return state;
+            return { ...state };
     }
 };

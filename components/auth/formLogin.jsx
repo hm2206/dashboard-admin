@@ -13,7 +13,7 @@ const FormLogin = ({ t }) => {
 
     const router = useRouter();
 
-    const loginRequest = new LoginRequest(t);
+    const loginRequest = new LoginRequest({ translate: t });
 
     const [errors, setErrors] = useState({})
     const [form, setForm] = useState({})

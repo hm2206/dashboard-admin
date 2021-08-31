@@ -1,4 +1,5 @@
 import urlJoin from 'url-join'
+import nookies from 'nookies'
 
 class BaseRequest {
 
@@ -11,7 +12,14 @@ class BaseRequest {
 
     translate = null
 
+    ctx = null
+
     codeErrors = {};
+
+    configHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': ''
+    }
 
     defaultErrors = {
         ERR_CONNECTION_REFUSED: "errors.ERR_CONNECTION_REFUSED"
@@ -19,20 +27,38 @@ class BaseRequest {
 
     defaultMessage = "errors.DEFAULT";
 
-    constructor(translate = null) {
-        this.translate = translate
+    paramsDefault = {
+        translate: null,
+        ctx: null
     }
 
-    requestGet(url = '', config = {}) {
+    constructor(params = this.paramsDefault) {
+        this.translate = params?.translate;
+        this.ctx = params?.ctx;
+        let { auth_token } = nookies.get(this.ctx);
+        this.setAuthorization(auth_token)
+    }
+
+    setAuthorization(token) {
+        this.configHeaders.Authorization = `Bearer ${token}`
+    }
+
+    setCtx(newCtx) {
+        this.ctx = newCtx;
+    }
+
+    requestGet(url = '', tmpConfig = {}) {
         return new Promise(async (resolver, reject) => {
+            let config = Object.assign({ headers: this.configHeaders }, tmpConfig)
             await this.apiLib.get(urlJoin(this.root, url), config)
             .then(res => resolver(res))
             .catch(err => reject(this.onError(err))) 
         })
     }
 
-    requestPost(url = '', data = {}, config = {}) {
+    requestPost(url = '', data = {}, tmpConfig = {}) {
         return new Promise(async (resolver, reject) => {
+            let config = Object.assign({ headers: this.configHeaders }, tmpConfig)
             await this.apiLib.post(urlJoin(this.root, url), data, config)
             .then(res => resolver(res))
             .catch(err => reject(this.onError(err))) 
