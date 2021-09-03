@@ -35,18 +35,19 @@ export const stateInitial = {
 // reducers
 export const authReducer = (state = stateInitial, action) => {
     switch (action.type) {
-        case HYDRATE:
-            return { ...state, ...action.payload }
+        case HYDRATE: 
+            let newState = Object.assign(state, action.payload.auth);
+            return newState
         case SET_LOGGED:
             state.logged = action.payload
-            return { ...state };
+            return state;
         case SET_TOKEN:
             state.token = action.payload
-            return { ...state };
+            return state;
         case SET_USER:
             state.user = action.payload
-            return { ...state }; 
+            return state; 
         default:
-            return { ...state };
+            return state;
     }
 };

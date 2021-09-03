@@ -5,6 +5,7 @@ import { Container, Row, Col} from 'reactstrap'
 import UserEdit from '../components/auth/users/userEdit'
 import PersonEdit from '../components/auth/people/personEdit'
 import { authorize } from '../helpers/authServerSideProps'
+import { connect } from 'react-redux'
 
 const IndexPage = () => (
     <Layout>
@@ -24,6 +25,6 @@ const IndexPage = () => (
     </Layout>
 )
 
-IndexPage.getInitialProps = authorize
+export const getServerSideProps = authorize('Perfil')
 
-export default IndexPage;
+export default connect(state => state)(IndexPage);

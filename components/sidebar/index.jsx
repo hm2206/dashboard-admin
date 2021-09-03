@@ -3,7 +3,7 @@ import { ArrowRight, ArrowLeft, Grid } from 'react-feather';
 import Link from 'next/link'
 import Image from 'next/image'
 import menus from '../../data/menu'
-import { connect, useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { wrapperScreen } from '../../redux/thunks/screenThunk'
 import Show from '../utils/show'
 import Menu from './menu';
@@ -64,4 +64,4 @@ const Sidebar = ({ t }) => {
   );
 }
 
-export default connect(state => state)(translate(Sidebar));
+export default translate(Sidebar);

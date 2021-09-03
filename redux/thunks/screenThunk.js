@@ -2,6 +2,7 @@ import sessiontStorage from 'sessionstorage'
 import { HYDRATE } from 'next-redux-wrapper'
 
 // Action types
+export const SET_TITLE = 'SET_TITLE';
 export const RESIZE_SCREEN = 'RESIZE_SCREEN';
 export const WRAPPER_SCREEN = 'WRAPPER_SCREEN';
 export const DEFAULT_THEME = 'DEFAULT_THEME';
@@ -9,6 +10,11 @@ export const TOGGLE_THEME = 'TOGGLE_THEME';
 
 
 // Action creator
+export const setTitle = (title) => ({
+    type: SET_TITLE,
+    payload: title
+})
+
 export const resizeScreen = () => ({
     type: RESIZE_SCREEN
 })
@@ -28,6 +34,7 @@ export const toggleTheme = () => ({
 
 // Estado inicial
 export const stateInitial = {
+    title: '',
     width: 0,
     height: 0,
     wrapper: false,
@@ -40,8 +47,11 @@ const limit = 1350;
 // Reducer
 export const screeenReducer = (state = stateInitial, action) => {
     switch (action.type) {
-        case HYDRATE:
-            return { ...state, ...action.payload }
+        case HYDRATE: 
+            let newState = Object.assign(state, action.payload.screen)
+            return newState 
+        case SET_TITLE:
+            return { ...state, title: action.payload } 
         case RESIZE_SCREEN:
             state.width = window.innerWidth
             state.height = window.innerHeight
@@ -49,8 +59,7 @@ export const screeenReducer = (state = stateInitial, action) => {
             else state.wrapper = false;
             return  { ...state };
         case WRAPPER_SCREEN:
-            state.wrapper = !state.wrapper;
-            return state;
+            return { ...state, wrapper: !state.wrapper };
         case DEFAULT_THEME: 
             let dark = parseInt(sessiontStorage.getItem('dark')) ? true : false
             document.body.className = dark ? 'dark-only' : 'light'
@@ -59,8 +68,8 @@ export const screeenReducer = (state = stateInitial, action) => {
             state.dark = !state.dark;
             document.body.className = state.dark ? 'dark-only' : 'light'
             sessiontStorage.setItem('dark', state.dark ? 1 : 0)
-            return { ...state };
+            return state;
         default:
-            return { ...state };
+            return state;
     }
 }

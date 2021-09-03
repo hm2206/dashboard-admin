@@ -1,6 +1,5 @@
 import { setTranslations, setLanguage } from 'react-switch-lang';
 import sessionStorage from 'sessionstorage';
-import { HYDRATE } from 'next-redux-wrapper'
 import { langs } from '../../data/lang'
 
 
@@ -28,8 +27,6 @@ export const stateInitial = {
 // reducers
 export const languageReducer = (state = stateInitial, action) => {
     switch (action.type) {
-        case HYDRATE:
-            return { ...state, ...action.payload }
         case DEFAULT_LANG:
             let lang = sessionStorage.getItem('lang') || state.lang;
             setTranslations(langs)

@@ -3,7 +3,7 @@ import LangBar from './langBar';
 import NotifyBar from './notifyBar';
 import UserBar from './userBar';
 import { Maximize } from 'react-feather';
-import { connect, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { toggleTheme } from '../../redux/thunks/screenThunk'
 
 const RightBar = () => {
@@ -39,4 +39,4 @@ const RightBar = () => {
     )
 }
 
-export default connect(state => state)(RightBar);
+export default RightBar;

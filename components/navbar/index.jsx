@@ -3,7 +3,7 @@ import RightBar from './rightBar'
 import Image from 'next/image'
 import { Menu } from 'react-feather'
 import { wrapperScreen, defaultTheme } from '../../redux/thunks/screenThunk'
-import { connect, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const NavbarIndex = () => {
 
@@ -56,4 +56,4 @@ const NavbarIndex = () => {
     )
 }
 
-export default connect(state => state)(NavbarIndex)
+export default NavbarIndex

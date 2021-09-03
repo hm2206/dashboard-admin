@@ -20,6 +20,6 @@ const PageLogin = () => {
     )
 }
 
-export const getServerSideProps = guest
+export const getServerSideProps = guest('Login')
 
 export default PageLogin;

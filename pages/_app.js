@@ -3,9 +3,8 @@ import { useRouter } from "next/router"
 import Head from 'next/head'
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
 import { wrapper } from "../redux/store"
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { defaultLang } from '../redux/thunks/languageThunk'
-import { setUser } from '../redux/thunks/authThunk'
 
 import '../assets/scss/app.scss'
 
@@ -14,20 +13,14 @@ const MyApp = ({ Component, pageProps }) => {
   
   const router = useRouter()
 
-  const { title, user } = pageProps?.props || {};
-
   // redux
   const dispatch = useDispatch();
+  const { title } = useSelector(state => state.screen)
 
   useEffect(() => {
     dispatch(defaultLang())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (user) dispatch(setUser(user))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
 
   return (
       <>
