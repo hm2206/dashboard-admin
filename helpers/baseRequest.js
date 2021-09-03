@@ -37,10 +37,15 @@ class BaseRequest {
         this.ctx = params?.ctx;
         let { auth_token } = nookies.get(this.ctx);
         this.setAuthorization(auth_token)
+        this.setClientToken(process.env.NEXT_PUBLIC_CLIENT_TOKEN)
     }
 
     setAuthorization(token) {
         this.configHeaders.Authorization = `Bearer ${token}`
+    }
+
+    setClientToken(token) {
+        this.configHeaders.ClientToken = token
     }
 
     setCtx(newCtx) {
