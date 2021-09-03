@@ -14,6 +14,10 @@ class LoginRequest extends BaseRequest {
         return this.requestPost('/login', data)
     }
 
+    logout() {
+        return this.requestPost('/logout')
+    }
+
 }
 
 export default LoginRequest

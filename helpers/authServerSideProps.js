@@ -1,6 +1,6 @@
 import { wrapper } from '../redux/store'
 import nookies from 'nookies'
-import { setLogged, setUser } from '../redux/thunks/authThunk'
+import { setLogged, setToken, setUser } from '../redux/thunks/authThunk'
 import { setTitle } from '../redux/thunks/screenThunk'
 import AuthRequest from '../request/auth/authRequest'
 
@@ -22,6 +22,8 @@ export const authorize = (title = '') => wrapper.getServerSideProps(store => asy
     if (!auth.logged) {
 
         nookies.destroy(ctx, 'auth_token')
+        store.dispatch(setUser({}))
+        store.dispatch(setToken(null))
 
         return {
             redirect: {
@@ -32,6 +34,7 @@ export const authorize = (title = '') => wrapper.getServerSideProps(store => asy
     } 
 
     // add title
+    store.dispatch(setToken(auth_token))
     store.dispatch(setTitle(title))
 })
 
@@ -46,9 +49,6 @@ export const guest = (title = '') => wrapper.getServerSideProps(store => async (
 
     // response error
     if (auth.logged) {
-
-        store.dispatch(setUser({}))
-
         return {
             redirect: {
                 destination: '/',
@@ -58,5 +58,7 @@ export const guest = (title = '') => wrapper.getServerSideProps(store => async (
     }
     
     // add title
+    store.dispatch(setUser({}))
+    store.dispatch(setToken(null))
     store.dispatch(setTitle(title))
 })

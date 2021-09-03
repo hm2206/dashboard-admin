@@ -1,9 +1,13 @@
 import { HYDRATE } from 'next-redux-wrapper'
+import LoginRequest from '../../request/auth/loginRequest'
+import nookies from 'nookies'
+import Router from 'next/router'
 
 // Action types
 export const SET_LOGGED = 'SET_LOGGED'
 export const SET_TOKEN = 'SET_TOKEN'
 export const SET_USER = 'SET_USER'
+export const LOGOUT = 'LOGOUT'
 
 
 // Actions creator
@@ -21,6 +25,17 @@ export const setUser = (newUser = {}) => ({
     type: SET_USER,
     payload: newUser || {}
 })
+
+export const logout = (translate = null) => async (dispatch) => {
+    const loginRequest = new LoginRequest({ translate })
+    await loginRequest.logout()
+    .then(() => dispatch({ type: LOGOUT }))
+    .catch(err => {
+        if (err.code == 'E_UNAUTHORIZED_ACCESS') {
+            dispatch({ type: LOGOUT });
+        }
+    })
+}
 
 // Estado initial
 export const stateInitial = {
@@ -47,6 +62,12 @@ export const authReducer = (state = stateInitial, action) => {
         case SET_USER:
             state.user = action.payload
             return state; 
+        case LOGOUT:
+            state.user = {};
+            state.token = null;
+            nookies.destroy(null, 'auth_token');
+            Router.push('/login');
+            return state;
         default:
             return state;
     }
