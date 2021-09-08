@@ -5,6 +5,7 @@ import { Loader } from 'react-feather'
 import Show from '../../utils/show'
 import UserRequest from '../../../request/auth/public/userRequest';
 import Swal from 'sweetalert2';
+import Link from 'next/link'
 
 const StepSendCode = ({ t, onCode = null }) => {
 
@@ -120,6 +121,13 @@ const StepSendCode = ({ t, onCode = null }) => {
                         {current_loading ? <Loader/> : t('auth.formResetPassword.send_code')} 
                     </Button>
                 </Show>
+            </div>
+
+            <div className="form-group mb-0">
+                <div className="checkbox ml-3"></div>
+                <Link href="/login">
+                    <a className="link">{t('auth.formResetPassword.back')}</a>
+                </Link>
             </div>
         </>
     )

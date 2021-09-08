@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Label, FormGroup, Input, Button } from 'reactstrap';
-import Link from 'next/link'
 import { Loader, Eye, EyeOff } from 'react-feather'
 import { translate } from 'react-switch-lang'
 import UserRequest from '../../../request/auth/public/userRequest';
@@ -97,13 +96,6 @@ const StepChangePassword = ({ t, email }) => {
                 />
                 <label>{errors?.password_confirmation?.[0] || ''}</label>
             </FormGroup>
-
-            <div className="form-group mb-0">
-                <div className="checkbox ml-3"></div>
-                <Link href="/login">
-                    <a className="link">{t('auth.formResetPassword.back')}</a>
-                </Link>
-            </div>
 
             <div className="form-group mb-0 mt-5">
                 <Button color="primary" 
