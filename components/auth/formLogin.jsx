@@ -8,6 +8,7 @@ import { setCookie } from 'nookies'
 import { useRouter } from 'next/router'
 import { Loader } from 'react-feather'
 import Swal from 'sweetalert2';
+import Link from 'next/link'
 
 const FormLogin = ({ t }) => {
 
@@ -62,8 +63,8 @@ const FormLogin = ({ t }) => {
             <TabContent activeTab={"jwt"} className="content-login">
                 <TabPane  className="fade show" tabId={"jwt"}>
                     <Form className="theme-form" onSubmit={handleLogin}>
-                        <h4>{t('formLogin.title')}</h4>
-                        <p>{t('formLogin.description')}</p>
+                        <h4>{t('auth.formLogin.title')}</h4>
+                        <p>{t('auth.formLogin.description')}</p>
 
                         <div style={{
                             position: "absolute",
@@ -74,7 +75,7 @@ const FormLogin = ({ t }) => {
                         </div>
 
                         <FormGroup>
-                            <Label className="col-form-label">{t('formLogin.email')}</Label>
+                            <Label className="col-form-label">{t('auth.formLogin.email')}</Label>
                             <Input className={`form-control`} 
                                 type="email"
                                 name="email"
@@ -87,7 +88,7 @@ const FormLogin = ({ t }) => {
                         </FormGroup>
 
                         <FormGroup>
-                            <Label className="col-form-label">{t('formLogin.password')}</Label>
+                            <Label className="col-form-label">{t('auth.formLogin.password')}</Label>
                             <Input className={`form-control`}
                                 name="password"
                                 type={show_password ? 'text' : 'password'}
@@ -106,7 +107,9 @@ const FormLogin = ({ t }) => {
 
                         <div className="form-group mb-0">
                             <div className="checkbox ml-3"></div>
-                            <a className="link" href="#javascript">{t('formLogin.forget_password')}</a>
+                            <Link href="/resetPassword">
+                                <a className="link">{t('auth.formLogin.forget_password')}</a>
+                            </Link>
                         </div>
 
                         <div className="form-group mb-0 mt-5">
@@ -114,14 +117,14 @@ const FormLogin = ({ t }) => {
                                 className="btn-block"
                                 disabled={!canSubmit || current_loading}
                             >
-                                {current_loading ? <Loader/> : t('formLogin.button')} 
+                                {current_loading ? <Loader/> : t('auth.formLogin.button')} 
                             </Button>
                         </div>
                         
-                        <p className="mt-4 mb-0">
-                            {t('formLogin.have_an_account')}
-                            <a className="ml-2" href="#javascript">{t('formLogin.create_account')}</a>
-                        </p>
+                        {/* <p className="mt-4 mb-0">
+                            {t('auth.formLogin.have_an_account')}
+                            <a className="ml-2" href="#javascript">{t('auth.formLogin.create_account')}</a>
+                        </p> */}
                     </Form>
                 </TabPane>
             </TabContent>

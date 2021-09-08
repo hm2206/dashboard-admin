@@ -3,6 +3,10 @@
     cursor: pointer;
 }
 
+.cursor-not-allowed {
+    cursor: not-allowed;
+}
+
 .page-enter {
     opacity: 0;
     transform: scale(1.1);

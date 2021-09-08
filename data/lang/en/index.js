@@ -1,11 +1,11 @@
-import formLogin from './auth/formLogin.json'
+import auth from './auth/index.json'
 import layout from './layout.json'
 import errors from './errors.json'
 
 const en = {
     langs: { 
+        auth,
         errors,
-        formLogin,
         layout,
     },
     option: {
