@@ -3,6 +3,7 @@ import { selectLangs } from '../../data/lang/index.js';
 import Show from '../utils/show'
 import { useSelector, useDispatch } from 'react-redux'
 import { changelang } from '../../redux/thunks/languageThunk'
+import sessionStorage from 'sessionstorage';
 
 const LangBar = () => {
 
@@ -21,12 +22,12 @@ const LangBar = () => {
         dispatch(changelang(key))
     }
 
-    const handleDefaultLang = () => handleSelectLang(lang);
+    const handleDefaultLang = () => handleSelectLang(sessionStorage.getItem('lang'))
 
     useEffect(() => {
-        handleDefaultLang()
+        if (sessionStorage) handleDefaultLang()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [sessionStorage])
 
     const isObject = Object.keys(current_lang).length;
 

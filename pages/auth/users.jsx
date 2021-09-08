@@ -5,15 +5,15 @@ import Layout from '../../components/layout'
 import Breadcrumb from '../../components/layout/breadcrumb'
 import { Container } from 'reactstrap'
 
-const PeoplePage = () => (
+const UsersPage = () => (
     <Layout>
-        <Breadcrumb parent="People" title="List People" />
+        <Breadcrumb parent="Users" title="List Users" />
         <Container fluid>
-            <div>Page People</div>
+            <div>Page Users</div>
         </Container>
     </Layout>
 )
 
-export const getServerSideProps = authorize("People");
+export const getServerSideProps = authorize("Users");
 
-export default connect(state => state)(PeoplePage);
+export default connect(state => state)(UsersPage);

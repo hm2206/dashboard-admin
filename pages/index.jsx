@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 const IndexPage = () => (
     <Layout>
         <Breadcrumb parent="Users" title="Edit Profile" />
-        <Container fluid={true}>
+        <Container fluid>
             <div className="edit-profile">
                 <Row>
                     <Col xl="4">

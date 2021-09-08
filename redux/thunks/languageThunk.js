@@ -1,6 +1,8 @@
+import { HYDRATE } from 'next-redux-wrapper'
 import { setTranslations, setLanguage } from 'react-switch-lang';
 import sessionStorage from 'sessionstorage';
 import { langs } from '../../data/lang'
+import nookies from 'nookies';
 
 
 // Action types
