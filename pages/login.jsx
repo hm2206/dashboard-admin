@@ -2,6 +2,7 @@ import React from 'react'
 import { Container, Row, Col } from 'reactstrap'
 import FormLogin from '../components/auth/formLogin';
 import { guest } from '../helpers/authServerSideProps'
+import { connect } from 'react-redux'
 
 const PageLogin = () => {
 
@@ -10,7 +11,7 @@ const PageLogin = () => {
             <Row className="m-0">
                 <Col xs="12" className="p-0">
                     <div>
-                        <div className="login-card">
+                        <div className="login-card block">
                             <FormLogin/>
                         </div>    
                     </div>    
@@ -22,4 +23,4 @@ const PageLogin = () => {
 
 export const getServerSideProps = guest('Login')
 
-export default PageLogin;
+export default connect(state => state)(PageLogin);

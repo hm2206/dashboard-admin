@@ -4,20 +4,19 @@ import Sidebar from '../sidebar'
 import Footer from '../footer'
 import { ChevronUp } from 'react-feather'
 import { resizeScreen } from '../../redux/thunks/screenThunk'
-import { useDispatch, useSelector, connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const IndexLayout = ({ children = null }) => {
 
     // redux
     const dispatch = useDispatch()
-    const { wrapper } = useSelector(state => state.screen)
 
     const isObjectWindow = typeof window == 'object';
 
     const handleResize = () => dispatch(resizeScreen())
 
     useEffect(() => {
-        if (isObjectWindow) resizeScreen()
+        if (isObjectWindow) handleResize()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isObjectWindow])
 

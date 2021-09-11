@@ -31,6 +31,29 @@ export const toggleTheme = () => ({
     type: TOGGLE_THEME
 })
 
+const getMode = (size) => {
+    let data = [
+        { name: "xxl", size: 1400 },
+        { name: "xl", size: 1200 },
+        { name: "lg", size: 992 },
+        { name: "md", size: 768 },
+        { name: "sm", size: 576 },
+        { name: "xs", size: 576 },
+    ]
+
+    let response = data.find((d, index) => {
+
+        let isLastItem = (data.length - 1) == index;
+
+        if (!isLastItem && d.size <= size) return true;
+
+        if (isLastItem && d.size > size) return true;
+        
+        return false;
+    })
+
+    return response.name || null;
+}
 
 // Estado inicial
 export const stateInitial = {
@@ -38,6 +61,7 @@ export const stateInitial = {
     width: 0,
     height: 0,
     wrapper: false,
+    mode: null,
     dark: false,
 }
 
@@ -57,6 +81,7 @@ export const screeenReducer = (state = stateInitial, action) => {
             state.height = window.innerHeight
             if (limit >= state.width) state.wrapper = true;
             else state.wrapper = false;
+           state.mode = getMode(state.width);
             return  { ...state };
         case WRAPPER_SCREEN:
             return { ...state, wrapper: !state.wrapper };

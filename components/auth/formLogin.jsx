@@ -9,10 +9,13 @@ import { useRouter } from 'next/router'
 import { Loader } from 'react-feather'
 import Swal from 'sweetalert2';
 import Link from 'next/link'
+import { useSelector } from 'react-redux'
 
 const FormLogin = ({ t }) => {
 
     const router = useRouter();
+
+    const { mode } = useSelector(state => state.screen);
 
     const loginRequest = new LoginRequest({ translate: t });
 
@@ -59,7 +62,7 @@ const FormLogin = ({ t }) => {
     }
 
     return (
-        <div className="login-main login-tab"> 
+        <div className={`login-main ${mode == 'xs' ? 'block' : ''}`}> 
             <TabContent activeTab={"jwt"} className="content-login">
                 <TabPane  className="fade show" tabId={"jwt"}>
                     <Form className="theme-form" onSubmit={handleLogin}>
@@ -74,9 +77,9 @@ const FormLogin = ({ t }) => {
                             <LangBar/>
                         </div>
 
-                        <FormGroup>
+                        <FormGroup className="mb-0">
                             <Label className="col-form-label">{t('auth.formLogin.email')}</Label>
-                            <Input className={`form-control`} 
+                            <Input className={`form-control block`} 
                                 type="email"
                                 name="email"
                                 value={`${form?.email || ''}`}
@@ -87,9 +90,9 @@ const FormLogin = ({ t }) => {
                             <label>{errors?.email?.[0] || ''}</label>
                         </FormGroup>
 
-                        <FormGroup>
+                        <FormGroup className="mb-0">
                             <Label className="col-form-label">{t('auth.formLogin.password')}</Label>
-                            <Input className={`form-control`}
+                            <Input className={`form-control block`}
                                 name="password"
                                 type={show_password ? 'text' : 'password'}
                                 value={`${form?.password || ''}`}
@@ -98,7 +101,7 @@ const FormLogin = ({ t }) => {
                                 disabled={current_loading}
                             />
                             
-                            <div className="show-hide pt-2">
+                            <div className="show-hide pt-2 block">
                                 {componentTooglePassword}
                             </div>
 
