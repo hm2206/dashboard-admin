@@ -5,38 +5,7 @@ import { translate } from 'react-switch-lang'
 import { setPeople, addPeople } from '../../../redux/thunks/peopleThunk'
 import { useDispatch, useSelector } from 'react-redux';
 import ObjectId from 'bson-objectid'
-import { Input, Button } from 'reactstrap'
-import { Search } from 'react-feather'
-
-const HeaderList = ({ querySearch = "", total = 1, disabled = false, onChange = null, onClick = null }) => {
-
-    const { data } = useSelector(state => state.people)
-
-    return (
-        <div className="row">
-            <div className="col-md-1 mb-1">
-                <h6>{data.length}/{total}</h6>
-            </div>
-            <div className="col-md-5 mb-1 col-10">
-                <Input onChange={({ target }) => typeof onChange == 'function' ? onChange(target) : null}
-                    name="query_search"
-                    disabled={disabled}
-                    value={querySearch}
-                />
-            </div>
-            <div className="col-md-1 mb-1 col-2">
-                <Button size="xs" block
-                    color="primary"
-                    className="pt-1"
-                    disabled={disabled}
-                    onClick={(e) => typeof onClick == 'function' ? onClick(e) : null}
-                >
-                    <Search/>
-                </Button>
-            </div>
-        </div>
-    )
-}
+import { HeaderList } from '../../utils/headers'
 
 const PersonList = ({ t }) => {
 
@@ -101,7 +70,8 @@ const PersonList = ({ t }) => {
             disabled={!canNext}
             isData={data.length}
             title={
-                <HeaderList total={data.length}
+                <HeaderList start={data.length}
+                    total={total}
                     disabled={current_loading}
                     querySearch={query_search}
                     onChange={handleQuerySearch}

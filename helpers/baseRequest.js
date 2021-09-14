@@ -22,7 +22,8 @@ class BaseRequest {
     }
 
     defaultErrors = {
-        ERR_CONNECTION_REFUSED: "errors.ERR_CONNECTION_REFUSED"
+        ERR_CONNECTION_REFUSED: "errors.ERR_CONNECTION_REFUSED",
+        E_PAYMENT_REQUIRED: "errors.E_PAYMENT_REQUIRED",
     }
 
     defaultMessage = "errors.DEFAULT";

@@ -49,3 +49,17 @@
 .login-main.block {
     width: 90%;
 }
+
+.float-button {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+}
+
+.float-button span {
+    margin-left: -5px;
+    margin-bottom: -7px;
+}

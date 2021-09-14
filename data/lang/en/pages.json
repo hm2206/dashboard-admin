@@ -1,0 +1,8 @@
+{
+    "auth": {
+        "people": {
+            "title": "People",
+            "description": "List People"
+        }
+    }
+}

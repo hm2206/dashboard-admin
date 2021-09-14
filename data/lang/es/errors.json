@@ -1,4 +1,5 @@
 {
     "DEFAULT": "Algo salió mal, intenta de nuevo",
-    "ERR_CONNECTION_REFUSED": "La conexión ha sido rechazada"
+    "ERR_CONNECTION_REFUSED": "La conexión ha sido rechazada",
+    "E_PAYMENT_REQUIRED": "La validación requerida falló"
 }
