@@ -4,12 +4,13 @@ import { authorize } from '../../helpers/authServerSideProps'
 import Layout from '../../components/layout'
 import Breadcrumb from '../../components/layout/breadcrumb'
 import { Container } from 'reactstrap'
+import UserList from '../../components/auth/users/userList'
 
 const UsersPage = () => (
     <Layout>
         <Breadcrumb parent="Users" title="List Users" />
         <Container fluid>
-            <div>Page Users</div>
+            <UserList/>
         </Container>
     </Layout>
 )

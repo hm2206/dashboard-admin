@@ -4,10 +4,11 @@ import nookies from 'nookies'
 import Router from 'next/router'
 
 // Action types
-export const SET_LOGGED = 'SET_LOGGED'
-export const SET_TOKEN = 'SET_TOKEN'
-export const SET_USER = 'SET_USER'
-export const LOGOUT = 'LOGOUT'
+export const SET_LOGGED = 'AUTH@SET_LOGGED'
+export const SET_TOKEN = 'AUTH@SET_TOKEN'
+export const SET_USER = 'AUTH@SET_USER'
+export const EDIT_USER = 'AUTH@EDIT_USER'
+export const LOGOUT = 'AUTH@LOGOUT'
 
 
 // Actions creator
@@ -23,6 +24,11 @@ export const setToken = (newToken = null) => ({
 
 export const setUser = (newUser = {}) => ({
     type: SET_USER,
+    payload: newUser || {}
+})
+
+export const editUser = (newUser = {}) => ({
+    type: EDIT_USER,
     payload: newUser || {}
 })
 
@@ -62,6 +68,9 @@ export const authReducer = (state = stateInitial, action) => {
         case SET_USER:
             state.user = action.payload
             return state; 
+        case EDIT_USER:
+            state.user = Object.assign(state.user, action.payload);
+            return state;
         case LOGOUT:
             state.user = {};
             state.token = null;

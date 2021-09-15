@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { authorize } from '../../helpers/authServerSideProps'
 import Layout from '../../components/layout'

@@ -1,59 +1,86 @@
-import React from 'react';
-import { Row, Col, Card, CardHeader, CardBody, Media, Form, FormGroup, Label, Input } from 'reactstrap'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { Button } from 'reactstrap'
+import UserForm from './userForm'
+import { SimpleModal } from '../../utils/modals'
+import { useDispatch, useSelector } from 'react-redux'
+import { editUser, editUsers } from '../../../redux/thunks/userThunk'
+import { editUser as authEditUser } from '../../../redux/thunks/authThunk'
+import UserRequest from '../../../request/auth/userRequest'
+import { translate } from 'react-switch-lang'
+import Swal from 'sweetalert2';
+import Show from '../../utils/show'
 
-const UserEdit = () => {
+const UserEdit = ({ t, isOpen = false, toggle = null }) => {
 
-    const { user } = useSelector(store => store?.auth)
+    const userRequest = new UserRequest({ translate: t })
+    
+    // redux
+    const dispatch = useDispatch();
+    const { user } = useSelector(state => state.user); 
+    const { auth } = useSelector(state => state);
+
+    // states
+    const [form, setForm] = useState({});
+    const [is_edit, setIsEdit] = useState(false);
+    const [current_loading, setCurrentLoading] = useState(false);
+
+    const handleInput = ({ name, value }, edit = true) => {
+        setForm(prev => ({ ...prev, [name]: value }))
+        setIsEdit(edit)
+    }
+
+    const handleCancel = () => setIsEdit(false);
+
+    const handleUpdate = async () => {
+        setCurrentLoading(true);
+        await userRequest.update(user.id, form)
+        .then(async ({ data }) => {
+            await Swal.fire({ icon: 'success', text: 'Los cambios se guardaron correctamente' })
+            dispatch(editUser(data))
+            dispatch(editUsers(data))
+            setIsEdit(false)
+            if (auth.user.id == user.id) dispatch(authEditUser(data))
+        }).catch(err => Swal.fire({ icon: 'error', text: err.message }))
+        setCurrentLoading(false);
+    }
+
+    useEffect(() => {
+        if (!is_edit && user) setForm(Object.assign({}, user));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [is_edit, user])
 
     return (
-        <Card>
-            <CardHeader>
-                <h4 className="card-title mb-0">MyProfile</h4>
-                <div className="card-options">
-                    <a className="card-options-collapse" href="#javascript">
-                        <i className="fe fe-chevron-up"></i>
-                    </a>
-                    <a className="card-options-remove" href="#javascript">
-                        <i className="fe fe-x"></i>
-                    </a>
-                </div>
-            </CardHeader>
-            <CardBody>
-                <Form>
-                    <Row className="mb-2">
-                        <div className="col-auto">
-                            <Media className="img-70 rounded-circle" alt="" src="/image/7.jpg" />
-                        </div>
-                        <Col>
-                            <h3 className="mb-1">{user?.person?.fullname}</h3>
-                            <p className="mb-4">Designer</p>
-                        </Col>
-                    </Row>
-                    <FormGroup>
-                        <h6 className="form-label">Bio</h6>
-                        <Input type="textarea" className="form-control" rows="5" defaultValue="On the other hand, we denounce with righteous indignation" />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label className="form-label">EmailAddress</Label>
-                        <Input className="form-control" placeholder="your-email@domain.com" />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label className="form-label">Password</Label>
-                        <Input className="form-control" type="password" defaultValue="password" />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label className="form-label">Website</Label>
-                        <Input className="form-control" placeholder="http://Uplor .com" />
-                    </FormGroup>
-                    <div className="form-footer">
-                        <button className="btn btn-primary btn-block">Save</button>
-                    </div>
-                </Form>
-            </CardBody>
-        </Card> 
-    );
+        <SimpleModal title={"Edit Person"}
+            isOpen={isOpen}
+            toggle={toggle}
+            centered
+            footer={
+                <>
+                    <Show condicion={is_edit}>
+                        <Button color="light"
+                            className="mr-1"
+                            disabled={current_loading}
+                            onClick={handleCancel}
+                        >
+                            Cancelar
+                        </Button>
+                    </Show>
+                    <Button color="primary"
+                        disabled={current_loading}
+                        onClick={handleUpdate}
+                    >
+                        Actualizar
+                    </Button>
+                </>
+            }
+        >
+            <UserForm form={form}
+                isEdit
+                disabled={current_loading}
+                onChange={handleInput}
+            />
+        </SimpleModal>
+    )
 }
 
-export default UserEdit;
-
+export default translate(UserEdit);
