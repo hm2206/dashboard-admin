@@ -1,92 +1,82 @@
-import React from 'react';
-import { Form, CardHeader, CardBody, CardFooter, Row, Col, FormGroup, Label, Input } from 'reactstrap'
+import React, { useEffect, useState } from 'react';
+import { Button } from 'reactstrap'
+import PersonForm from './personForm'
+import { SimpleModal } from '../../utils/modals'
+import { useDispatch, useSelector } from 'react-redux'
+import { editPeople, editPerson } from '../../../redux/thunks/peopleThunk'
+import PeopleRequest from '../../../request/auth/peopleRequest'
+import { translate } from 'react-switch-lang'
+import Swal from 'sweetalert2';
+import Show from '../../utils/show'
 
-const PersonEdit = () => {
+const PersonEdit = ({ t, isOpen = false, toggle = null }) => {
+
+    const peopleRequest = new PeopleRequest({ translate: t })
     
+    // redux
+    const dispatch = useDispatch();
+    const { person } = useSelector(state => state.people);
+
+    // states
+    const [form, setForm] = useState({});
+    const [is_edit, setIsEdit] = useState(false);
+    const [current_loading, setCurrentLoading] = useState(false);
+
+    const handleInput = ({ name, value }) => {
+        setForm(prev => ({ ...prev, [name]: value }))
+        setIsEdit(true)
+    }
+
+    const handleCancel = () => setIsEdit(false);
+
+    const handleUpdate = async () => {
+        setCurrentLoading(true);
+        await peopleRequest.update(person.id, form)
+        .then(async ({ data }) => {
+            await Swal.fire({ icon: 'success', text: 'Los cambios se guardaron correctamente' })
+            dispatch(editPerson(data))
+            dispatch(editPeople(data))
+            setIsEdit(false)
+        }).catch(err => Swal.fire({ icon: 'error', text: err.message }))
+        setCurrentLoading(false);
+    }
+
+    useEffect(() => {
+        if (!is_edit && person) setForm(Object.assign({}, person))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [is_edit, person])
+
     return (
-        <Form className="card">
-            <CardHeader>
-                <h4 className="card-title mb-0">EditProfile</h4>
-                <div className="card-options">
-                    <a className="card-options-collapse" href="#javascript">
-                    <i className="fe fe-chevron-up"></i>
-                    </a>
-                    <a className="card-options-remove" href="#javascript">
-                    <i className="fe fe-x"></i>
-                    </a>
-                </div>
-                </CardHeader>
-            <CardBody>
-                <Row>
-                    <Col lg="4">
-                    <FormGroup>
-                        <Label className="form-label">Company</Label>
-                        <Input className="form-control" type="text" placeholder="Company" />
-                    </FormGroup>
-                    </Col>
-                    <Col sm="6" md="3">
-                    <FormGroup>
-                        <Label className="form-label">Username</Label>
-                        <Input className="form-control" type="text" placeholder="Username" />
-                    </FormGroup>
-                    </Col>
-                    <Col sm="6" md="4">
-                    <FormGroup>
-                        <Label className="form-label">EmailAddress</Label>
-                        <Input className="form-control" type="email" placeholder="Email" />
-                    </FormGroup>
-                    </Col>
-                    <Col sm="6" md="6">
-                    <FormGroup>
-                        <Label className="form-label">FirstName</Label>
-                        <Input className="form-control" type="text" placeholder="Company" />
-                    </FormGroup>
-                    </Col>
-                    <Col sm="6" md="6">
-                    <FormGroup>
-                        <Label className="form-label">LastName</Label>
-                        <Input className="form-control" type="text" placeholder="Last Name" />
-                    </FormGroup>
-                    </Col>
-                    <Col md="12">
-                    <FormGroup>
-                        <Label className="form-label">Address</Label>
-                        <Input className="form-control" type="text" placeholder="Home Address" />
-                    </FormGroup>
-                    </Col>
-                    <Col sm="6" md="4">
-                    <FormGroup>
-                        <Label className="form-label">City</Label>
-                        <Input className="form-control" type="text" placeholder="City" />
-                    </FormGroup>
-                    </Col>
-                    <Col sm="6" md="3">
-                    <FormGroup>
-                        <Label className="form-label">PostalCode</Label>
-                        <Input className="form-control" type="number" placeholder="ZIP Code" />
-                    </FormGroup>
-                    </Col>
-                    <Col md="5">
-                    <FormGroup>
-                        <Label className="form-label">Country</Label>
-                        <Input type="select" name="select" className="form-control btn-square">
-                            <option>Perú</option>
-                        </Input>
-                    </FormGroup>
-                    </Col>
-                    <Col md="12">
-                    <div className="form-group mb-0">
-                        <Label className="form-label">AboutMe</Label>
-                        <Input type="textarea" className="form-control" rows="5" placeholder="Enter About your description" />
-                    </div>
-                    </Col>
-                </Row>
-            </CardBody>
-            <CardFooter className="text-right">
-                <button className="btn btn-primary" type="submit">UpdateProfile</button>
-            </CardFooter>
-        </Form>
+        <SimpleModal title={"Edit Person"}
+            isOpen={isOpen}
+            toggle={toggle}
+            centered
+            footer={
+                <>
+                    <Show condicion={is_edit}>
+                        <Button color="light"
+                            className="mr-1"
+                            disabled={current_loading}
+                            onClick={handleCancel}
+                        >
+                            Cancelar
+                        </Button>
+                    </Show>
+                    <Button color="primary"
+                        disabled={current_loading}
+                        onClick={handleUpdate}
+                    >
+                        Actualizar
+                    </Button>
+                </>
+            }
+        >
+            <PersonForm form={form}
+                disabled={current_loading}
+                onChange={handleInput}
+            />
+        </SimpleModal>
     )
 }
 
-export default PersonEdit
+export default translate(PersonEdit);

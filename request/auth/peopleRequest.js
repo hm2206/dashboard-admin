@@ -16,6 +16,14 @@ class PeopleRequest extends BaseRequest {
         return this.requestPost('/', data, config)
     }
 
+    update(id, data = {}, config = {}) {
+        return this.requestPost(`${id}?_method=PUT`, data, config)
+    }
+
+    delete(id, data = {}, config = {}) {
+        return this.requestPost(`${id}?_method=DELETE`, data, config)
+    }
+
 }
 
 export default PeopleRequest;

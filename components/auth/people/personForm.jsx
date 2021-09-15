@@ -91,7 +91,7 @@ const PersonForm = ({ form = {}, onChange = null }) => {
 
                 <Col md="6">
                     <FormGroup>
-                        <Label>Teléfono <b className="text-danger">*</b></Label>
+                        <Label>Teléfono</Label>
                         <Input type="tel"
                             name="phone"
                             value={form?.phone || null}
@@ -102,7 +102,7 @@ const PersonForm = ({ form = {}, onChange = null }) => {
 
                 <Col md="12">
                     <FormGroup>
-                        <Label>Dirección <b className="text-danger">*</b></Label>
+                        <Label>Dirección</Label>
                         <Input type="textarea"
                             name="address"
                             value={form?.address || null}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SimpleModal } from '../../utils/modals'
 import PersonForm from './personForm';
 import { Button } from 'reactstrap'
@@ -27,6 +27,7 @@ const PersonCreate = ({ t, isOpen = false, toggle = null }) => {
         await peopleRequest.store(form)
         .then(async ({ data }) => {
             await Swal.fire({ icon: 'success', text: 'Los datos se guardarón correctamente!' });
+            setForm({});
             dispatch(addPeople([data]))
             if (typeof toggle == 'function') toggle();
         }).catch(err => {
@@ -34,6 +35,10 @@ const PersonCreate = ({ t, isOpen = false, toggle = null }) => {
         })
         setCurrentLoading(false);
     }
+
+    useEffect(() => {
+        if (!isOpen) setForm({});
+    }, [isOpen])
 
     return (
         <SimpleModal title={"Create Person"}
