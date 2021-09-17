@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import Show from './show'
 
 const attributes = {
-    size: '',
+    size: 'xl',
     title: '', 
     isOpen: false, 
     toggle: null, 
@@ -16,7 +16,7 @@ const attributes = {
 export const SimpleModal = (props = attributes) => {
 
     return (
-        <Modal {...props} toggle={null} size="xl">
+        <Modal {...props} toggle={null}>
             <ModalHeader toggle={props.toggle}>{props.title}</ModalHeader>
             <ModalBody>
                 {props.children}

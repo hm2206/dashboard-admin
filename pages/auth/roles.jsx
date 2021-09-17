@@ -4,16 +4,18 @@ import { authorize } from '../../helpers/authServerSideProps'
 import Layout from '../../components/layout'
 import Breadcrumb from '../../components/layout/breadcrumb'
 import { Container } from 'reactstrap'
+import RoleList from '../../components/auth/roles/roleList'
+import { translate } from 'react-switch-lang'
 
-const RolesPage = () => (
+const RolesPage = ({ t }) => (
     <Layout>
-        <Breadcrumb parent="Roles" title="List Roles" />
+        <Breadcrumb parent={t('pages.auth.roles.title')} title={t('pages.auth.roles.description')} />
         <Container fluid>
-            <div>Page Roles</div>
+            <RoleList/>
         </Container>
     </Layout>
 )
 
 export const getServerSideProps = authorize("Roles");
 
-export default connect(state => state)(RolesPage);
+export default connect(state => state)(translate(RolesPage));

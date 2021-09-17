@@ -3,6 +3,14 @@
         "people": {
             "title": "People",
             "description": "List People"
+        },
+        "users": {
+            "title": "Users",
+            "description": "List Users"
+        },
+        "roles": {
+            "title": "Roles",
+            "description": "List Roles"
         }
     }
 }

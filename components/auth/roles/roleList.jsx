@@ -1,27 +1,27 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import SizingTable from '../../tables/sizingTable'
-import UserRequest from '../../../request/auth/userRequest';
+import RoleRequest from '../../../request/auth/roleRequest';
 import { translate } from 'react-switch-lang'
-import { setUsers, addUsers, setUser } from '../../../redux/thunks/userThunk'
+import { setRoles, addRoles, setRole } from '../../../redux/thunks/roleThunk'
 import { useDispatch, useSelector } from 'react-redux';
 import ObjectId from 'bson-objectid'
 import { HeaderList } from '../../utils/headers'
-import UserEdit from './userEdit'
+import RoleEdit from './roleEdit'
 import { FloatButton } from '../../utils/buttons'
 import { Plus } from 'react-feather'
-import UserCreate from './userCreate'
-import UserItem from './userItem'
+import RoleCreate from './roleCreate'
+import RoleItem from './roleItem'
 
 const options = {
     CREATE: "CREATE",
     EDIT: "EDIT",
 }
 
-const UserList = ({ t }) => {
+const RoleList = ({ t }) => {
 
     // redux
     const dispatch = useDispatch();
-    const { users } = useSelector(state => state.user)
+    const { roles } = useSelector(state => state.role)
 
     const [current_loading, setCurrentLoading] = useState(true)
     const [query_search, setQuerySearch] = useState("");
@@ -32,19 +32,19 @@ const UserList = ({ t }) => {
     const [is_refresh, setIsRefresh] = useState(true);
     const [option, setOption] = useState(options.LIST);
 
-    const userRequest = new UserRequest({ translate: t })
+    const roleRequest = new RoleRequest({ translate: t })
 
     const canNext = useMemo(() => {
         return (page + 1) <= last_page;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [users]);
+    }, [roles]);
 
-    const getUsers = async (add = false) => {
+    const getRoles = async (add = false) => {
         setCurrentLoading(true);
-        await userRequest.index({ page, query_search })
+        await roleRequest.index({ page, query_search })
         .then(({ data }) => {
             let { meta } = data;
-            let result = add ? addUsers : setUsers; 
+            let result = add ? addRoles : setRoles; 
             dispatch(result(data.data));
             setLastPage(meta.last_page);
             setTotal(meta.total);
@@ -62,9 +62,9 @@ const UserList = ({ t }) => {
         setIsRefresh(true);
     }
 
-    const handleEdit = (user = {}) => {
+    const handleEdit = (role = {}) => {
         setOption(options.EDIT)
-        dispatch(setUser(user))
+        dispatch(setRole(role))
     }
 
     const toggle = () => {
@@ -72,7 +72,7 @@ const UserList = ({ t }) => {
     }
 
     useEffect(() => {
-        if (is_refresh) getUsers();
+        if (is_refresh) getRoles();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [is_refresh])
     
@@ -81,7 +81,7 @@ const UserList = ({ t }) => {
     }, [is_refresh]);
 
     useEffect(() => {
-        if (page > 1) getUsers(true)
+        if (page > 1) getRoles(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page])
 
@@ -89,9 +89,9 @@ const UserList = ({ t }) => {
         <>
             <SizingTable isLoading={current_loading}
                 disabled={!canNext}
-                isData={users.length}
+                isData={roles.length}
                 title={
-                    <HeaderList start={users.length}
+                    <HeaderList start={roles.length}
                         total={total}
                         disabled={current_loading}
                         querySearch={query_search}
@@ -99,11 +99,11 @@ const UserList = ({ t }) => {
                         onClick={handleSearch}
                     />
                 }
-                headers={["#", "Email", "Username", "Acciones"]}
+                headers={["#", "Nombre", "Descripción", "Acciones"]}
                 onDown={() => setPage(prev => prev + 1)}
             >
-                {users.map((d, index) => 
-                    <UserItem key={`list-item-${new ObjectId().toHexString()}`}
+                {roles.map((d, index) => 
+                    <RoleItem key={`list-item-${new ObjectId().toHexString()}`}
                         onEdit={handleEdit}
                         data={d}
                         index={index}
@@ -116,15 +116,15 @@ const UserList = ({ t }) => {
                 color="success"
                 onClick={() => setOption(options.CREATE)}
             />
-            <UserCreate isOpen={option == options.CREATE} 
+            <RoleCreate isOpen={option == options.CREATE} 
                 toggle={toggle}
             />
             {/* edit */}
-            <UserEdit isOpen={option == options.EDIT}
+            <RoleEdit isOpen={option == options.EDIT}
                 toggle={toggle}
             />
         </>
     )
 }
 
-export default translate(UserList);
+export default translate(RoleList);
