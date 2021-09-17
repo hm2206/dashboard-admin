@@ -76,12 +76,15 @@ export const roleReducer = (state = stateInitial, action = {}) => {
             state.roles.unshift(action.payload); 
             return state;
         case EDIT_ROLES:
-            state.roles.map(d => {
-                if (action.payload.is_default) d.is_default = 0;
-                if (d.id != action.payload.id) return d
-                let editRole = Object.assign(d, action.payload);
-                return editRole;
-            });
+            let tmpEditRoles = state.roles.find(d => d.id == action.payload.id);
+            let stateEditRoles = Object.assign(tmpEditRoles, action.payload);
+            if (!action.payload.is_default) {
+                state.roles.map(d => d.id != stateEditRoles.id ? d : stateEditRoles);
+                return state;  
+            } 
+            state.roles = state.roles.filter(d => d.id != action.payload.id);
+            state.roles.map(d => d.is_default = 0);
+            state.roles.unshift(stateEditRoles);
             return state;
         case DELETE_ROLES:
             state.roles = state.roles.filter(d => d.id != action.payload);
