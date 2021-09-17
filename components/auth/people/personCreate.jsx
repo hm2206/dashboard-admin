@@ -42,6 +42,7 @@ const PersonCreate = ({ t, isOpen = false, toggle = null }) => {
 
     return (
         <SimpleModal title={"Create Person"}
+            size="xl"
             isOpen={isOpen}
             toggle={toggle}
             centered

@@ -42,6 +42,7 @@ const UserCreate = ({ t, isOpen = false, toggle = null }) => {
 
     return (
         <SimpleModal title={"Create User"}
+            size="lg"
             isOpen={isOpen}
             toggle={toggle}
             centered

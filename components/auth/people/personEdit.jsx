@@ -48,6 +48,7 @@ const PersonEdit = ({ t, isOpen = false, toggle = null }) => {
 
     return (
         <SimpleModal title={"Edit Person"}
+            size="xl"
             isOpen={isOpen}
             toggle={toggle}
             centered
