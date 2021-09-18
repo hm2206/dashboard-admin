@@ -24,6 +24,14 @@ class UserRequest extends BaseRequest {
         return this.requestPost(`${id}?_method=DELETE`, data, config)
     }
 
+    methods(id, config = {}) {
+        return this.requestGet(`${id}/methods?perPage=100`, config)
+    }
+
+    detachMethod(id, config = {}) {
+        return this.requestPost(`${id}/detach_method?_method=DELETE`, config)
+    }
+
 }
 
 export default UserRequest;

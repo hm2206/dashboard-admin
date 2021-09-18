@@ -9,6 +9,8 @@ export const EDIT_ROLES = 'ROLE@EDIT_ROLES'
 export const DELETE_ROLES = 'ROLE@DELETE_ROLES'
 export const SET_ROLE = 'ROLE@SET_ROLE'
 export const EDIT_ROLE = 'ROLE@EDIT_ROLE'
+export const SET_METHODS = 'ROLE@SET_METHODS'
+export const DELETE_METHODS = 'ROLE@DELETE_METHODS'
 
 
 // Actions creator
@@ -52,11 +54,22 @@ export const editRole = (newRole = {}) => ({
     payload: newRole
 })
 
+export const setMethods = (newMethods = []) => ({
+    type: SET_METHODS,
+    payload: newMethods
+})
+
+export const deleteMethods = (methodId) => ({
+    type: DELETE_METHODS,
+    payload: methodId
+})
 
 // Estado initial
 export const stateInitial = {
     roles: [],
-    role: {}
+    role: {
+        methods: []
+    }
 }
 
 
@@ -93,11 +106,14 @@ export const roleReducer = (state = stateInitial, action = {}) => {
             state.role = action.payload;
             return state;
         case EDIT_ROLE:
-            state.role = { 
-                ...state.role, 
-                ...action.payload 
-            }
+            state.role = { ...state.role, ...action.payload }
             return state
+        case SET_METHODS:
+            state.role.methods = action.payload;
+            return state;
+        case DELETE_METHODS:
+            state.role.methods = state.role.methods.filter(d => d.id != action.payload);
+            return state;
         default:
             return state;
     }

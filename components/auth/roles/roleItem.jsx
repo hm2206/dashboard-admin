@@ -1,13 +1,13 @@
 import React from 'react';
-import { Edit, Trash2 } from 'react-feather'
+import { Edit, Trash2, Sliders } from 'react-feather'
 import { deleteRoles } from '../../../redux/thunks/roleThunk'
 import Show from '../../utils/show'
 import Swal from 'sweetalert2';
 import { translate } from 'react-switch-lang'
 import RoleRequest from '../../../request/auth/roleRequest'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-const RoleItem = ({ t, data, index, onEdit = null }) => {
+const RoleItem = ({ t, data, index, onEdit = null, onSetting = null }) => {
 
     const roleRequest = new RoleRequest({ translate: t })
 
@@ -24,6 +24,10 @@ const RoleItem = ({ t, data, index, onEdit = null }) => {
         .catch(err => Swal.fire({ icon: 'error', text: err.message }))
     }
 
+    const handleSetting = (role) => {
+        if (typeof onSetting == 'function') onSetting(role); 
+    } 
+
     return (
         <tr>
             <td>{index + 1}</td>
@@ -36,12 +40,16 @@ const RoleItem = ({ t, data, index, onEdit = null }) => {
             <td className="text-center">
                 <Edit onClick={() => handleEdit(data)}
                     size="20"
-                    className="text-success cursor-pointer mr-2"
+                    className="text-success cursor-pointer mr-3"
+                />
+                <Sliders onClick={() => handleSetting(data)}
+                    size="20"
+                    className="cursor-pointer mr-3"
                 />
                 <Show condicion={!data?.is_default}>
                     <Trash2 onClick={() => handleDelete(data.id)}
                         size="20"
-                        className="text-danger cursor-pointer"
+                        className="text-danger cursor-pointer mr-3"
                     />
                 </Show>
             </td>

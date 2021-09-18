@@ -11,10 +11,12 @@ import { FloatButton } from '../../utils/buttons'
 import { Plus } from 'react-feather'
 import RoleCreate from './roleCreate'
 import RoleItem from './roleItem'
+import RoleListMethods from './roleListMethods';
 
 const options = {
     CREATE: "CREATE",
     EDIT: "EDIT",
+    METHODS: "METHODS"
 }
 
 const RoleList = ({ t }) => {
@@ -67,6 +69,11 @@ const RoleList = ({ t }) => {
         dispatch(setRole(role))
     }
 
+    const handleSetting = (role = {}) => {
+        setOption(options.METHODS)
+        dispatch(setRole(role));
+    }
+
     const toggle = () => {
         setOption("")
     }
@@ -84,6 +91,12 @@ const RoleList = ({ t }) => {
         if (page > 1) getRoles(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page])
+
+    // vaciar role
+    useEffect(() => {
+        if (!option) dispatch(setRole({}))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [option])
 
     return (
         <>
@@ -105,6 +118,7 @@ const RoleList = ({ t }) => {
                 {roles.map((d, index) => 
                     <RoleItem key={`list-item-${new ObjectId().toHexString()}`}
                         onEdit={handleEdit}
+                        onSetting={handleSetting}
                         data={d}
                         index={index}
                     />
@@ -121,6 +135,10 @@ const RoleList = ({ t }) => {
             />
             {/* edit */}
             <RoleEdit isOpen={option == options.EDIT}
+                toggle={toggle}
+            />
+            {/* setting */}
+            <RoleListMethods isOpen={option == options.METHODS}
                 toggle={toggle}
             />
         </>
