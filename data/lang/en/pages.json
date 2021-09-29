@@ -12,5 +12,19 @@
             "title": "Roles",
             "description": "List Roles"
         }
+    },
+    "restaurant": {
+        "products": {
+            "title": "Products",
+            "description": "List Products"
+        },
+        "boards": {
+            "title": "Boards",
+            "description": "List Boards"
+        },
+        "tickets": {
+            "title": "Tickets",
+            "description": "List Tickets"
+        }
     }
 }

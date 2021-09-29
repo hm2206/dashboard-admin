@@ -7,7 +7,7 @@ class UserRequest extends BaseRequest {
 
     root = "/roles"
 
-    index({ page = 1, query_search = "" }, config = {}) {
+    index = ({ page = 1, query_search = "" }, config = {}) => {
         let queryString = `page=${page}&query_search=${query_search}`;
         return this.requestGet(`/?${queryString}`, config)
     }

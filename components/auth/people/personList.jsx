@@ -11,6 +11,7 @@ import { FloatButton } from '../../utils/buttons'
 import { Plus } from 'react-feather'
 import PersonCreate from './personCreate'
 import PersonItem from './personItem'
+import useRequest from '../../../hook/useRequest'
 
 const options = {
     CREATE: "CREATE",
@@ -22,44 +23,25 @@ const PersonList = ({ t }) => {
     // redux
     const dispatch = useDispatch();
     const { data } = useSelector(state => state.people)
-
-    const [current_loading, setCurrentLoading] = useState(true)
-    const [query_search, setQuerySearch] = useState("");
-    const [page, setPage] = useState(1);
-    const [total, setTotal] = useState(0);
-    const [last_page, setLastPage] = useState(0);
-    const [is_error, setIsError] = useState(false)
-    const [is_refresh, setIsRefresh] = useState(true);
+    
+    // states
     const [option, setOption] = useState(options.LIST);
 
+    // request
     const peopleRequest = new PeopleRequest({ translate: t })
 
-    const canNext = useMemo(() => {
-        return (page + 1) <= last_page;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
-
-    const getPeople = async (add = false) => {
-        setCurrentLoading(true);
-        await peopleRequest.index({ page, query_search })
-        .then(({ data }) => {
-            let { meta } = data;
-            let result = add ? addPeople : setPeople; 
-            dispatch(result(data.data));
-            setLastPage(meta.last_page);
-            setTotal(meta.total);
-            setIsError(false);
-        }).catch(() => setIsError(true))
-        setCurrentLoading(false)
-    }
+    // hooks
+    const request = useRequest({ handle: peopleRequest.index }, (data, add) => {
+        let result = add ? addPeople : setPeople;
+        dispatch(result(data));
+    });
 
     const handleQuerySearch = (target) => {
-        setQuerySearch(target?.value)
+        request.setQuerySearch(target?.value)
     }
 
     const handleSearch = () => {
-        setPage(1);
-        setIsRefresh(true);
+        request.setIsRefresh(true);
     }
 
     const handleEdit = (person = {}) => {
@@ -71,30 +53,16 @@ const PersonList = ({ t }) => {
         setOption("")
     }
 
-    useEffect(() => {
-        if (is_refresh) getPeople();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [is_refresh])
-    
-    useEffect(() => {
-        if (is_refresh) setIsRefresh(false);
-    }, [is_refresh]);
-
-    useEffect(() => {
-        if (page > 1) getPeople(true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page])
-
     return (
         <>
-            <SizingTable isLoading={current_loading}
-                disabled={!canNext}
+            <SizingTable isLoading={request.loading}
+                disabled={!request.canNext}
                 isData={data.length}
                 title={
                     <HeaderList start={data.length}
-                        total={total}
-                        disabled={current_loading}
-                        querySearch={query_search}
+                        total={request.total}
+                        disabled={request.loading}
+                        querySearch={request.query_search}
                         onChange={handleQuerySearch}
                         onClick={handleSearch}
                     />

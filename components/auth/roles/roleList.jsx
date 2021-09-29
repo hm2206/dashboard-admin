@@ -12,6 +12,7 @@ import { Plus } from 'react-feather'
 import RoleCreate from './roleCreate'
 import RoleItem from './roleItem'
 import RoleListMethods from './roleListMethods';
+import useRequest from '../../../hook/useRequest'
 
 const options = {
     CREATE: "CREATE",
@@ -25,43 +26,22 @@ const RoleList = ({ t }) => {
     const dispatch = useDispatch();
     const { roles } = useSelector(state => state.role)
 
-    const [current_loading, setCurrentLoading] = useState(true)
-    const [query_search, setQuerySearch] = useState("");
-    const [page, setPage] = useState(1);
-    const [total, setTotal] = useState(0);
-    const [last_page, setLastPage] = useState(0);
-    const [is_error, setIsError] = useState(false)
-    const [is_refresh, setIsRefresh] = useState(true);
+    // states
     const [option, setOption] = useState(options.LIST);
 
+    // request
     const roleRequest = new RoleRequest({ translate: t })
-
-    const canNext = useMemo(() => {
-        return (page + 1) <= last_page;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [roles]);
-
-    const getRoles = async (add = false) => {
-        setCurrentLoading(true);
-        await roleRequest.index({ page, query_search })
-        .then(({ data }) => {
-            let { meta } = data;
-            let result = add ? addRoles : setRoles; 
-            dispatch(result(data.data));
-            setLastPage(meta.last_page);
-            setTotal(meta.total);
-            setIsError(false);
-        }).catch(() => setIsError(true))
-        setCurrentLoading(false)
-    }
+    const request = useRequest({ handle: roleRequest.index } , (data, add) => {
+        let result = add ? addRoles : setRoles; 
+        dispatch(result(data));
+    });
 
     const handleQuerySearch = (target) => {
-        setQuerySearch(target?.value)
+        request.setQuerySearch(target?.value)
     }
 
     const handleSearch = () => {
-        setPage(1);
-        setIsRefresh(true);
+        request.setIsRefresh(true);
     }
 
     const handleEdit = (role = {}) => {
@@ -78,20 +58,6 @@ const RoleList = ({ t }) => {
         setOption("")
     }
 
-    useEffect(() => {
-        if (is_refresh) getRoles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [is_refresh])
-    
-    useEffect(() => {
-        if (is_refresh) setIsRefresh(false);
-    }, [is_refresh]);
-
-    useEffect(() => {
-        if (page > 1) getRoles(true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page])
-
     // vaciar role
     useEffect(() => {
         if (!option) dispatch(setRole({}))
@@ -100,14 +66,14 @@ const RoleList = ({ t }) => {
 
     return (
         <>
-            <SizingTable isLoading={current_loading}
-                disabled={!canNext}
+            <SizingTable isLoading={request.loading}
+                disabled={!request.canNext}
                 isData={roles.length}
                 title={
                     <HeaderList start={roles.length}
-                        total={total}
-                        disabled={current_loading}
-                        querySearch={query_search}
+                        total={request.total}
+                        disabled={request.loading}
+                        querySearch={request.query_search}
                         onChange={handleQuerySearch}
                         onClick={handleSearch}
                     />

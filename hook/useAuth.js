@@ -2,9 +2,9 @@ import { useDispatch } from "react-redux"
 import AuthRequest from "../request/auth/authRequest"
 import { setUser, setLogged } from "../redux/thunks/authThunk"
 import { useRouter } from 'next/router'
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-const useAuth = (token) => {
+const useAuth = () => {
 
     const [current_loading, setCurrentLoading] = useState(false)
 

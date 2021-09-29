@@ -7,10 +7,17 @@
     "menu": {
         "auth": {
             "title": "Auth",
-            "description": "People, Users, & Roles",
+            "description": "People, Users & Roles",
             "people": "People",
             "users": "Users",
             "roles": "Roles"
+        },
+        "restaurant": {
+            "title": "Restaurant",
+            "description": "Products, Boards & Tickets",
+            "products": "Products",
+            "boards": "Boards",
+            "tickets": "Tickets"
         }
     }
 }
