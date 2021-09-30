@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, Button } from 'reactstrap'
 import { Search } from 'react-feather'
 
-export const HeaderList = ({ start = 1, total = 1, querySearch = '', disabled = false, onChange = null, onClick = null }) => {
+export const HeaderList = ({ start = 1, total = 1, querySearch = '', disabled = false, children = null, onChange = null, onClick = null }) => {
 
     return (
         <div className="row">
@@ -16,6 +16,9 @@ export const HeaderList = ({ start = 1, total = 1, querySearch = '', disabled = 
                     value={querySearch}
                 />
             </div>
+
+            {children}
+            
             <div className="col-md-1 mb-1 col-2">
                 <Button size="xs" block
                     color="primary"

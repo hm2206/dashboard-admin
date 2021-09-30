@@ -4,7 +4,7 @@ import { authorize } from '../../helpers/authServerSideProps'
 import Layout from '../../components/layout'
 import Breadcrumb from '../../components/layout/breadcrumb'
 import { Container } from 'reactstrap'
-import PersonList from '../../components/auth/people/personList'
+import ProductList from '../../components/restaurant/products/productList'
 import { translate } from 'react-switch-lang'
 
 const ProductsPage = ({ t }) => {
@@ -13,7 +13,7 @@ const ProductsPage = ({ t }) => {
         <Layout>
             <Breadcrumb parent={t('pages.restaurant.products.title')} title={t('pages.restaurant.products.description')} />
             <Container fluid>
-                <PersonList/>
+                <ProductList/>
             </Container>
         </Layout>
     )
