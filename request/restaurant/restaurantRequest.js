@@ -1,14 +1,14 @@
 import { apiRestaurant } from '../../services/apis'
 import BaseRequest from '../../helpers/baseRequest'
 
-class ProductRequest extends BaseRequest {
+class RestaurantRequest extends BaseRequest {
 
     apiLib = apiRestaurant
 
-    root = "/products"
+    root = "/restaurants"
 
-    index = ({ page = 1, query_search = "", restaurant_id = "" }, config = {}) => {
-        let queryString = `page=${page}&query_search=${query_search}&restaurant_id=${restaurant_id}`;
+    index = ({ page = 1, query_search = "", perPage = 20 }, config = {}) => {
+        let queryString = `page=${page}&query_search=${query_search}&perPage=${perPage}`;
         return this.requestGet(`/?${queryString}`, config)
     }
 
@@ -26,4 +26,4 @@ class ProductRequest extends BaseRequest {
 
 }
 
-export default ProductRequest;
+export default RestaurantRequest;

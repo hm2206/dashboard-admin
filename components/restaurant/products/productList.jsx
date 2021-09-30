@@ -12,6 +12,7 @@ import { Plus } from 'react-feather'
 import ProductCreate from './productCreate'
 import ProductItem from './productItem'
 import useRequest from '../../../hook/useRequest'
+import RestaurantSelect from '../restaurant/restaurantSelect';
 
 const options = {
     CREATE: "CREATE",
@@ -23,16 +24,22 @@ const ProductList = ({ t }) => {
     // redux
     const dispatch = useDispatch();
     const { products } = useSelector(state => state.product)
+    const { restaurant } = useSelector(state => state.restaurant)
 
     // states
     const [option, setOption] = useState(options.LIST);
 
-    // request
-    const productRequest = new ProductRequest({ translate: t })
-    const request = useRequest({ handle: productRequest.index }, (data, add) => {
+    const handleData = (data, add) => {
         let result = add ? addProducts : setProducts; 
         dispatch(result(data));
-    });
+    }
+
+    // request
+    const productRequest = new ProductRequest({ translate: t })
+    const request = useRequest({ 
+        handle: productRequest.index,
+        query: { restaurant_id: restaurant?.id || '' }
+    }, handleData);
 
     const handleQuerySearch = (target) => {
         request.setQuerySearch(target?.value)
@@ -63,10 +70,16 @@ const ProductList = ({ t }) => {
                         querySearch={request.query_search}
                         onChange={handleQuerySearch}
                         onClick={handleSearch}
-                    />
+                    >
+                        <div className="col-md-3">
+                            <RestaurantSelect
+                                onSelect={() => request.setIsRefresh(true)}
+                            />
+                        </div>
+                    </HeaderList>
                 }
                 headers={["#", "Code", "Nombre", "Precio", "Cantidad", "Restaurante", "Estado", "Acciones"]}
-                onDown={() => setPage(prev => prev + 1)}
+                onDown={() => request.nextPage()}
             >
                 {products.map((d, index) => 
                     <ProductItem key={`list-item-${new ObjectId().toHexString()}`}

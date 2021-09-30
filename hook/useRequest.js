@@ -35,6 +35,12 @@ const useRequest = ({ handle = null, params = [], query = {}, config = {} }, cal
         setFeching(new ObjectId().toHexString())
     }
 
+    const nextPage = () => {
+        let canNextPage = (page + 1) <= lastPage;
+        if (!canNextPage) return;
+        setPage(prev => prev + 1);
+    }
+ 
     useEffect(() => {
         if (isRefresh && page > 1) {
             setPage(1)
@@ -58,7 +64,7 @@ const useRequest = ({ handle = null, params = [], query = {}, config = {} }, cal
         if (isRefresh) setIsRefresh(false);
     }, [isRefresh]);
 
-    return { page, setPage, total, lastPage, loading, setQuerySearch, query_search, isError, canNext, setIsRefresh }
+    return { page, setPage, total, lastPage, loading, setQuerySearch, query_search, isError, canNext, setIsRefresh, nextPage }
 }
 
 export default useRequest;
