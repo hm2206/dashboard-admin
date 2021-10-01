@@ -6,7 +6,8 @@ import { peopleReducer } from './peopleThunk'
 import { userReducer } from './userThunk'
 import { roleReducer } from './roleThunk';
 import { productReducer } from './productThunk'
-import { restaurantReducer } from './restaurantThunk' 
+import { restaurantReducer } from './restaurantThunk'
+import { boardReducer } from './boardThunk' 
 
 const rootReducer = combineReducers({
     screen: screeenReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     user: userReducer,
     role: roleReducer,
     product: productReducer,
-    restaurant: restaurantReducer
+    restaurant: restaurantReducer,
+    board: boardReducer,
 });
 
 export default rootReducer;
